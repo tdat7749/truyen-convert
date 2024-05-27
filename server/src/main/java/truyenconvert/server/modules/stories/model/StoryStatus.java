@@ -1,8 +1,7 @@
 package truyenconvert.server.modules.stories.model;
 
 public enum StoryStatus {
-    Pending,
-    Published,
+    Continued,
     Compeleted,
     Paused
 }

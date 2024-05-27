@@ -22,7 +22,13 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "stories")
+@Table(name = "stories",indexes = {
+        @Index(name = "idx_slug",columnList = "slug"),
+        @Index(name = "idx_is_vip",columnList = "is_vip"),
+        @Index(name = "idx_story_state",columnList = "state"),
+        @Index(name = "idx_story_status",columnList = "status"),
+        @Index(name = "idx_story_deleted",columnList = "is_deleted")
+})
 public class Story {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +37,7 @@ public class Story {
     @Column(nullable = false,length = 400)
     private String title;
 
-    @Column(nullable = false,length = 430)
+    @Column(nullable = false,length = 430,unique = true)
     private String slug;
 
     @Column(columnDefinition = "TEXT",nullable = false)
@@ -44,14 +50,10 @@ public class Story {
     @ColumnDefault(value = "0")
     private long view;
 
-    @Column(nullable = false,name = "author_name")
-    private String authorName;
 
     @Column(nullable = false,name = "original_name")
     private String originalName;
 
-    @Column(nullable = false,name = "original_author_name")
-    private String originalAuthorName;
 
     @Column(nullable = false,name = "original_link")
     private String originalLink;
@@ -70,6 +72,13 @@ public class Story {
     @Column(nullable= false)
     @ColumnDefault(value = "'0'")
     private StoryStatus status;
+
+    @Column(nullable= false)
+    @ColumnDefault(value = "'0'")
+    private StoryState state;
+
+    @Column(nullable = false,name = "new_chap_at")
+    private LocalDateTime newChapAt;
 
     @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;
@@ -140,4 +149,10 @@ public class Story {
     @JoinColumn(name = "sect_id",nullable = false)
     @JsonBackReference
     private Sect sect;
+
+    // Author
+    @ManyToOne
+    @JoinColumn(name = "author_id",nullable = false)
+    @JsonBackReference
+    private Author author;
 }

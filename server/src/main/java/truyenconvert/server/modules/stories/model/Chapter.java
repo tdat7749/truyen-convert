@@ -31,8 +31,8 @@ public class Chapter {
     @Column(nullable = false)
     private int chapter;
 
-    @Column(nullable = true)
-    private long coin;
+    @Column(nullable = false,name = "unlock_coin")
+    private long unLockCoin;
 
     @Column(name = "time_expired")
     private LocalDateTime timeExpired;
