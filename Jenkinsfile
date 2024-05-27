@@ -52,7 +52,7 @@ pipeline{
                                     removePrefix: "server/target",
                                     remoteDirectory: "server",
                                     execCommand: """
-                                                                                 java -jar server.jar || echo "Failed to start server.jar"
+                                                                                 java -jar server.jar --spring.profiles.active=prod || echo "Failed to start server.jar"
                                                                                  sudo systemctl stop nginx || echo "Failed to stop nginx"
                                                                                  sudo systemctl start nginx || echo "Failed to start nginx"
                                                                                  sudo systemctl enable nginx || echo "Failed to enable nginx"
