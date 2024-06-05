@@ -1,4 +1,4 @@
-package truyenconvert.server.modules.stories.model;
+package truyenconvert.server.modules.book.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import truyenconvert.server.modules.users.model.User;
 
 import java.time.LocalDateTime;
@@ -16,33 +17,32 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "donations")
-public class Donation {
+@Table(name = "evaluations")
+public class Evaluation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false,length = 1000)
+    private String content;
+
     @Column(nullable = false)
-    private long coin;
+    @ColumnDefault(value = "'5'")
+    private double score;
 
     @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;
 
-    // Giver
-    @ManyToOne
-    @JoinColumn(name = "giver_id")
-    @JsonBackReference
-    private User userGave;
 
-    // story
+    //User
     @ManyToOne
-    @JoinColumn(name = "story_id")
+    @JoinColumn(name = "user_id",nullable = false)
     @JsonBackReference
-    private Story story;
+    private User user;
 
-    // Received
+    // Story
     @ManyToOne
-    @JoinColumn(name = "poster_id")
+    @JoinColumn(name = "book_id",nullable = false)
     @JsonBackReference
-    private User userReceived;
+    private Book book;
 }

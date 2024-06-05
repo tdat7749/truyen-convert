@@ -18,13 +18,13 @@ import java.util.function.Function;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    @Value("truyencv.secret-key")
+    @Value("${truyencv.secret-key}")
     private String serectKey;
 
-    @Value("truyencv.access-token-time")
+    @Value("${truyencv.access-token-time}")
     private String accessTokenTime;
 
-    @Value("truyencv.refresh-token-time")
+    @Value("${truyencv.refresh-token-time}")
     private String refreshTokenTime;
 
 

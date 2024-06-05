@@ -1,4 +1,4 @@
-package truyenconvert.server.modules.stories.model;
+package truyenconvert.server.modules.book.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -9,23 +9,34 @@ import lombok.NoArgsConstructor;
 import truyenconvert.server.modules.users.model.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "nomination")
-public class Nomination {
+@Table(name = "comments",indexes = {
+        @Index(name = "idx_parent_id",columnList = "parent_id")
+})
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "parent_id")
+    private int parentId;
+
+    @Column(nullable = false,length = 1000)
+    private String content;
+
     @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(nullable = false,name = "updated_at")
+    private LocalDateTime updatedAt;
 
-    //User
+    // User
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
     @JsonBackReference
@@ -33,8 +44,11 @@ public class Nomination {
 
     // Story
     @ManyToOne
-    @JoinColumn(name = "story_id",nullable = false)
+    @JoinColumn(name = "book_id",nullable = false)
     @JsonBackReference
-    private Story story;
+    private Book book;
 
+    //Like Commnet
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "likesComment")
+    private List<User> likes;
 }

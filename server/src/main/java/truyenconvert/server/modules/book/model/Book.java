@@ -1,4 +1,4 @@
-package truyenconvert.server.modules.stories.model;
+package truyenconvert.server.modules.book.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -29,7 +29,7 @@ import java.util.List;
         @Index(name = "idx_story_status",columnList = "status"),
         @Index(name = "idx_story_deleted",columnList = "is_deleted")
 })
-public class Story {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -89,7 +89,7 @@ public class Story {
 
     // Read History
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "story")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "book")
     @JsonManagedReference
     private List<ReadHistory> readHistories;
 
@@ -101,34 +101,34 @@ public class Story {
     private User user;
 
     // Chapter
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "story")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "book")
     @JsonManagedReference
     private List<Chapter> chapters;
 
     // Donation
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "story")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "book")
     @JsonManagedReference
     private List<Donation> donations;
 
     //Comment
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "story")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "book")
     @JsonManagedReference
     private List<Comment> comments;
 
     //Evaluation
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "story")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "book")
     @JsonManagedReference
     private List<Evaluation> evaluations;
 
     //Nomination
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "story")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "book")
     @JsonManagedReference
     private List<Nomination> nominations;
 
     //Marked
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "story")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "book")
     @JsonManagedReference
     private List<Marked> markeds;
 

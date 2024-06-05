@@ -12,7 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import truyenconvert.server.modules.bill.model.Bill;
 import truyenconvert.server.modules.read_histories.model.ReadHistory;
-import truyenconvert.server.modules.stories.model.*;
+import truyenconvert.server.modules.book.model.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,7 +39,6 @@ public class User implements UserDetails {
     private String password;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "'0'")
     private Role role;
 
     @Column(nullable = false,name = "display_name")
@@ -91,7 +90,7 @@ public class User implements UserDetails {
     // Story
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
     @JsonManagedReference
-    private List<Story> stories;
+    private List<Book> books;
 
     // Comment
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
@@ -162,7 +161,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
@@ -172,7 +171,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override

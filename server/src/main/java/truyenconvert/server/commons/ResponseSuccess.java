@@ -3,6 +3,8 @@ package truyenconvert.server.commons;
 
 import lombok.*;
 
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

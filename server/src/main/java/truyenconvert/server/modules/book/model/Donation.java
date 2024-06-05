@@ -1,4 +1,5 @@
-package truyenconvert.server.modules.stories.model;
+package truyenconvert.server.modules.book.model;
+
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -15,25 +16,33 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "marked")
-public class Marked {
+@Table(name = "donations")
+public class Donation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
+    private long coin;
+
     @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;
 
-
-    //User
+    // Giver
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "giver_id")
     @JsonBackReference
-    private User user;
+    private User userGave;
 
-    // Story
+    // story
     @ManyToOne
-    @JoinColumn(name = "story_id",nullable = false)
+    @JoinColumn(name = "book_id")
     @JsonBackReference
-    private Story story;
+    private Book book;
+
+    // Received
+    @ManyToOne
+    @JoinColumn(name = "poster_id")
+    @JsonBackReference
+    private User userReceived;
 }

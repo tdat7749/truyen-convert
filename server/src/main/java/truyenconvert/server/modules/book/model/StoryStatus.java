@@ -1,4 +1,4 @@
-package truyenconvert.server.modules.stories.model;
+package truyenconvert.server.modules.book.model;
 
 public enum StoryStatus {
     Continued,

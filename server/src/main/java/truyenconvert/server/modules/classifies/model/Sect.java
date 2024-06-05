@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import truyenconvert.server.modules.stories.model.Story;
+import truyenconvert.server.modules.book.model.Book;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,5 +37,5 @@ public class Sect {
     //Story
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "sect")
     @JsonManagedReference
-    private List<Story> stories;
+    private List<Book> books;
 }

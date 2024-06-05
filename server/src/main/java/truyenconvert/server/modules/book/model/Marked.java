@@ -1,11 +1,11 @@
-package truyenconvert.server.modules.read_histories.model;
+package truyenconvert.server.modules.book.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import truyenconvert.server.modules.book.model.Book;
 import truyenconvert.server.modules.users.model.User;
 
 import java.time.LocalDateTime;
@@ -15,28 +15,25 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "read_histories")
-public class ReadHistory {
+@Table(name = "marked")
+public class Marked {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private int chapter;
-
     @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(nullable = false,name = "updated_at")
-    private LocalDateTime updatedAt;
 
-
-    // User
+    //User
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
+    @JsonBackReference
     private User user;
 
+    // Story
     @ManyToOne
     @JoinColumn(name = "book_id",nullable = false)
+    @JsonBackReference
     private Book book;
 }

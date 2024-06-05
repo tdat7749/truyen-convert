@@ -1,5 +1,4 @@
-package truyenconvert.server.modules.stories.model;
-
+package truyenconvert.server.modules.book.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -7,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import truyenconvert.server.modules.users.model.User;
 
 import java.time.LocalDateTime;
@@ -17,18 +15,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "evaluations")
-public class Evaluation {
+@Table(name = "nomination")
+public class Nomination {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(nullable = false,length = 1000)
-    private String content;
-
-    @Column(nullable = false)
-    @ColumnDefault(value = "'5'")
-    private double score;
 
     @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;
@@ -42,7 +33,8 @@ public class Evaluation {
 
     // Story
     @ManyToOne
-    @JoinColumn(name = "story_id",nullable = false)
+    @JoinColumn(name = "book_id",nullable = false)
     @JsonBackReference
-    private Story story;
+    private Book book;
+
 }

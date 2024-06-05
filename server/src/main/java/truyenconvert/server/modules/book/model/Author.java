@@ -1,4 +1,4 @@
-package truyenconvert.server.modules.stories.model;
+package truyenconvert.server.modules.book.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -39,6 +39,6 @@ public class Author {
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "author")
     @JsonManagedReference
-    private List<Story> stories;
+    private List<Book> books;
 
 }
