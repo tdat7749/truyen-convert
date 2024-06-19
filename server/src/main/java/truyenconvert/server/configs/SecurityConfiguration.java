@@ -17,7 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-    @Value("truyencv.api-prefix")
+    @Value("${truyencv.api-prefix}")
     private String apiPrefix;
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;

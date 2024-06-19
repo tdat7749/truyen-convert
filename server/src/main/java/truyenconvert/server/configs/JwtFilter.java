@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import truyenconvert.server.commons.ResponseError;
-import truyenconvert.server.modules.jwt.JwtService;
+import truyenconvert.server.modules.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ import java.util.List;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    @Value("truyencv.api-prefix")
+    @Value("${truyencv.api-prefix}")
     private String apiPrefix;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
@@ -41,6 +41,21 @@ public class JwtFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    private boolean isRequestPassed(@NonNull HttpServletRequest request){
+        final List<Pair<String,String>> listEnpointPassed = Arrays.asList(
+                Pair.of(String.format("%s/auth/sign-in",apiPrefix),"POST"),
+                Pair.of(String.format("%s/auth/sign-up",apiPrefix),"POST"),
+                Pair.of(String.format("%s/auth/sign-out",apiPrefix),"POST")
+        );
+
+        String requestPath = request.getServletPath();
+        String requestMethod = request.getMethod();
+
+        Pair<String,String> currentRequest = Pair.of(requestPath,requestMethod);
+
+        return listEnpointPassed.contains(currentRequest);
+    }
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -49,7 +64,7 @@ public class JwtFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         try{
 
-            if(isRequestPassed(request)){
+            if(this.isRequestPassed(request)){
                 filterChain.doFilter(request,response);
                 return;
             }
@@ -58,7 +73,7 @@ public class JwtFilter extends OncePerRequestFilter {
             final String jwt;
 
             if(authHeader == null || !authHeader.startsWith("Bearer ")){
-                sendErrorFilter(response,HttpStatus.UNAUTHORIZED, "Phiên đăng nhập không hợp lệ");
+                sendErrorFilter(response,HttpStatus.BAD_REQUEST, "Bạn chưa đăng nhập");
                 return;
             }
             jwt = authHeader.substring(7);
@@ -67,7 +82,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null){
                 UserDetails user = userDetailsService.loadUserByUsername(userName);
                 if(!user.isAccountNonLocked()){
-                    throw new LockedException("Account has been locked");
+                    throw new LockedException("Tài khoản đã bị khóa");
                 }
 
                 if(jwtService.isTokenValid(jwt,user)){
@@ -109,18 +124,4 @@ public class JwtFilter extends OncePerRequestFilter {
         out.flush();
     }
 
-    private boolean isRequestPassed(@NonNull HttpServletRequest request){
-        final List<Pair<String,String>> listEnpointPassed = Arrays.asList(
-                  Pair.of(String.format("%s/auth/sign-in",apiPrefix),"POST"),
-                Pair.of(String.format("%s/auth/sign-up",apiPrefix),"POST"),
-                Pair.of(String.format("%s/auth/sign-out",apiPrefix),"POST")
-        );
-
-        String requestPath = request.getServletPath();
-        String requestMethod = request.getMethod();
-
-        Pair<String,String> currentRequest = Pair.of(requestPath,requestMethod);
-
-        return listEnpointPassed.contains(currentRequest);
-    }
 }
