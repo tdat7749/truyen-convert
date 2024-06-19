@@ -1,5 +1,6 @@
 package truyenconvert.server.modules.classifies.dto;
 
+
 import lombok.*;
 
 @Builder
@@ -7,7 +8,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateCategoryDTO {
+public class EditSectDTO {
     private String title;
     private String description;
 }

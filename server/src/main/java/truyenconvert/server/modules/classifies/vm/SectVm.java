@@ -5,11 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Builder
 @Getter
 @Setter
-public class CategoryVm {
+public class SectVm {
     private int id;
     private String title;
     private String description;

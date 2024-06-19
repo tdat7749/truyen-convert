@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateCategoryDTO {
+public class CreateWorldContextDTO {
     private String title;
     private String description;
 }

@@ -1,7 +1,10 @@
 package truyenconvert.server.modules.users.service;
 
 import org.springframework.stereotype.Service;
-import truyenconvert.server.modules.users.model.User;
+import org.springframework.web.multipart.MultipartFile;
+import truyenconvert.server.commons.ResponseSuccess;
+import truyenconvert.server.models.User;
+import truyenconvert.server.modules.users.dtos.ChangePasswordDTO;
 
 import java.util.Optional;
 
@@ -9,4 +12,6 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> findByEmail(String email);
     User save(User user);
+    ResponseSuccess<Boolean> changePassword(ChangePasswordDTO dto,User user);
+    ResponseSuccess<Boolean> changeAvatar(MultipartFile file,User user);
 }

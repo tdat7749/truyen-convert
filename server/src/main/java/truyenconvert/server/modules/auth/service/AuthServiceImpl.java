@@ -10,10 +10,10 @@ import truyenconvert.server.modules.auth.dtos.SignUpDTO;
 import truyenconvert.server.modules.auth.exceptions.EmailUsedException;
 import truyenconvert.server.modules.auth.vm.TokenVm;
 import truyenconvert.server.modules.common.service.MessageService;
-import truyenconvert.server.modules.jwt.JwtService;
+import truyenconvert.server.modules.jwt.service.JwtService;
 import truyenconvert.server.modules.users.exceptions.UserNotFoundException;
-import truyenconvert.server.modules.users.model.Role;
-import truyenconvert.server.modules.users.model.User;
+import truyenconvert.server.models.enums.Role;
+import truyenconvert.server.models.User;
 import truyenconvert.server.modules.users.service.UserService;
 import java.time.LocalDateTime;
 
@@ -85,5 +85,25 @@ public class AuthServiceImpl implements AuthService{
         userService.save(newUser);
 
         return new ResponseSuccess<>(messageService.getMessage("sign-up.success"), true);
+    }
+
+    @Override
+    public ResponseSuccess<Boolean> lockAccount(int id, User user) {
+        return null;
+    }
+
+    @Override
+    public ResponseSuccess<Boolean> unLockAccount(int id) {
+        return null;
+    }
+
+    @Override
+    public ResponseSuccess<Boolean> verifyAccount(String email, User user) {
+        return null;
+    }
+
+    @Override
+    public ResponseSuccess<Boolean> resendEmail(String email) {
+        return null;
     }
 }
