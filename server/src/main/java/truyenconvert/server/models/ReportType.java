@@ -27,6 +27,9 @@ public class ReportType {
     @Column(nullable = false,length = 1000)
     private String description;
 
+    @Column(length = 1000)
+    private String note;
+
     @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;
 

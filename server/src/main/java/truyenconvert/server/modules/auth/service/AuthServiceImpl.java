@@ -11,6 +11,9 @@ import truyenconvert.server.modules.auth.exceptions.EmailUsedException;
 import truyenconvert.server.modules.auth.vm.TokenVm;
 import truyenconvert.server.modules.common.service.MessageService;
 import truyenconvert.server.modules.jwt.service.JwtService;
+import truyenconvert.server.modules.users.exceptions.AccountHasBeenLockedException;
+import truyenconvert.server.modules.users.exceptions.AccountHasNotBeenLockedException;
+import truyenconvert.server.modules.users.exceptions.UserHasNotVerifiedException;
 import truyenconvert.server.modules.users.exceptions.UserNotFoundException;
 import truyenconvert.server.models.enums.Role;
 import truyenconvert.server.models.User;
@@ -50,7 +53,7 @@ public class AuthServiceImpl implements AuthService{
 
         var user = userService.findByEmail(dto.getEmail()).orElse(null);
         if(user == null){
-            throw new UserNotFoundException(messageService.getMessage("user.not.found"));
+            throw new UserNotFoundException(messageService.getMessage("user.not-found"));
         }
 
         var accessToken = jwtService.generateAccessToken(user);
@@ -61,7 +64,7 @@ public class AuthServiceImpl implements AuthService{
                 .refreshToken(refreshToken)
                 .build();
 
-        return new ResponseSuccess<>(messageService.getMessage("sign-in.success"), result);
+        return new ResponseSuccess<>(messageService.getMessage("auth.sign-in.success"), result);
     }
 
     @Override
@@ -70,7 +73,7 @@ public class AuthServiceImpl implements AuthService{
         var user = userService.findByEmail(emailLowerCase).orElse(null);
 
         if(user != null){
-            throw new EmailUsedException(messageService.getMessage("email.used"));
+            throw new EmailUsedException(messageService.getMessage("auth.email.used"));
         }
         var newUser = User.builder()
                 .email(emailLowerCase)
@@ -84,17 +87,45 @@ public class AuthServiceImpl implements AuthService{
 
         userService.save(newUser);
 
-        return new ResponseSuccess<>(messageService.getMessage("sign-up.success"), true);
+        return new ResponseSuccess<>(messageService.getMessage("auth.sign-up.success"), true);
     }
 
     @Override
     public ResponseSuccess<Boolean> lockAccount(int id, User user) {
-        return null;
+        var userFound = userService.findById(id).orElse(null);
+        if(userFound == null){
+            throw new UserNotFoundException(messageService.getMessage("user.not-found"));
+        }
+        if (!userFound.isVerify()){
+            throw new UserHasNotVerifiedException(messageService.getMessage("user.not-verified"));
+        }
+        if(userFound.isLock()){
+            throw new AccountHasBeenLockedException(messageService.getMessage("user.is-locked"));
+        }
+
+        userFound.setLock(true);
+        userService.save(userFound);
+
+        return new ResponseSuccess<>(messageService.getMessage("auth.locked-account"), true);
     }
 
     @Override
     public ResponseSuccess<Boolean> unLockAccount(int id) {
-        return null;
+        var userFound = userService.findById(id).orElse(null);
+        if(userFound == null){
+            throw new UserNotFoundException(messageService.getMessage("user.not-found"));
+        }
+        if (!userFound.isVerify()){
+            throw new UserHasNotVerifiedException(messageService.getMessage("user.not-verified"));
+        }
+        if(!userFound.isLock()){
+            throw new AccountHasNotBeenLockedException(messageService.getMessage("user.is-not-locked"));
+        }
+
+        userFound.setLock(false);
+        userService.save(userFound);
+
+        return new ResponseSuccess<>(messageService.getMessage("auth.unlocked-account"), true);
     }
 
     @Override

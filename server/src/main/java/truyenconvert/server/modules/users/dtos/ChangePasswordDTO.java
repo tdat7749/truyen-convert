@@ -9,6 +9,8 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChangePasswordDTO {
     @JsonProperty("current_password")
     @NotNull(message = "Trường current_password {not.null.message}")

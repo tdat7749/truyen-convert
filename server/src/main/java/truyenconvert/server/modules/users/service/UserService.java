@@ -11,6 +11,7 @@ import java.util.Optional;
 @Service
 public interface UserService {
     Optional<User> findByEmail(String email);
+    Optional<User> findById(int id);
     User save(User user);
     ResponseSuccess<Boolean> changePassword(ChangePasswordDTO dto,User user);
     ResponseSuccess<Boolean> changeAvatar(MultipartFile file,User user);

@@ -8,8 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import truyenconvert.server.models.enums.StoryState;
-import truyenconvert.server.models.enums.StoryStatus;
+import truyenconvert.server.models.enums.BookState;
+import truyenconvert.server.models.enums.BookStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -68,11 +68,11 @@ public class Book {
 
     @Column(nullable= false)
     @ColumnDefault(value = "'0'")
-    private StoryStatus status;
+    private BookStatus status;
 
     @Column(nullable= false)
     @ColumnDefault(value = "'0'")
-    private StoryState state;
+    private BookState state;
 
     @Column(nullable = false,name = "new_chap_at")
     private LocalDateTime newChapAt;

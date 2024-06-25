@@ -1,6 +1,6 @@
 package truyenconvert.server.models.enums;
 
-public enum StoryState {
+public enum BookState {
     Pending,
     Published,
     Closed
