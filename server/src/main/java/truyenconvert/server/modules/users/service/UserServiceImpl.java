@@ -1,10 +1,14 @@
 package truyenconvert.server.modules.users.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import truyenconvert.server.commons.ResponseSuccess;
 import truyenconvert.server.models.User;
+import truyenconvert.server.modules.common.service.MessageService;
 import truyenconvert.server.modules.users.dtos.ChangePasswordDTO;
+import truyenconvert.server.modules.users.exceptions.CurrentPasswordNotMatchException;
+import truyenconvert.server.modules.users.exceptions.NewPasswordNotMatchException;
 import truyenconvert.server.modules.users.repositories.UserRepository;
 
 import java.util.Optional;
@@ -13,9 +17,17 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final MessageService messageService;
 
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            MessageService messageService
+    ){
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.messageService = messageService;
     }
 
     @Override
@@ -35,7 +47,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseSuccess<Boolean> changePassword(ChangePasswordDTO dto, User user) {
-        return null;
+        boolean isMatchPassword = passwordEncoder.matches(dto.getCurrentPassword(),user.getPassword());
+        if(!isMatchPassword){
+            throw new CurrentPasswordNotMatchException(messageService.getMessage("user.is-not-match-password"));
+        }
+
+        boolean isNewPasswordMatch = dto.getNewPassword().equals(dto.getConfirmNewPassword());
+        if(!isNewPasswordMatch){
+            throw new NewPasswordNotMatchException(messageService.getMessage("user.new-password-not-match"));
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        this.save(user);
+        return new ResponseSuccess<>(messageService.getMessage("user.change-password.success"),true);
     }
 
     @Override

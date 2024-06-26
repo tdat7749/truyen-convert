@@ -1,5 +1,8 @@
 package truyenconvert.server.modules.auth.service;
 
+import ch.qos.logback.classic.LoggerContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +32,8 @@ public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
 
     private final MessageService messageService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     public AuthServiceImpl(
             UserService userService,
@@ -64,6 +69,8 @@ public class AuthServiceImpl implements AuthService{
                 .refreshToken(refreshToken)
                 .build();
 
+        LOGGER.info("Người dùng {} vừa đăng nhập thành công.",dto.getEmail());
+
         return new ResponseSuccess<>(messageService.getMessage("auth.sign-in.success"), result);
     }
 
@@ -87,6 +94,8 @@ public class AuthServiceImpl implements AuthService{
 
         userService.save(newUser);
 
+        LOGGER.info("Người dùng {} vừa đăng ký thành công.",dto.getEmail());
+
         return new ResponseSuccess<>(messageService.getMessage("auth.sign-up.success"), true);
     }
 
@@ -106,6 +115,8 @@ public class AuthServiceImpl implements AuthService{
         userFound.setLock(true);
         userService.save(userFound);
 
+        LOGGER.info("Khóa tài khoản {} thành công.",userFound.getEmail());
+
         return new ResponseSuccess<>(messageService.getMessage("auth.locked-account"), true);
     }
 
@@ -124,6 +135,8 @@ public class AuthServiceImpl implements AuthService{
 
         userFound.setLock(false);
         userService.save(userFound);
+
+        LOGGER.info("Mở khóa tài khoản {} thành công.",userFound.getEmail());
 
         return new ResponseSuccess<>(messageService.getMessage("auth.unlocked-account"), true);
     }
