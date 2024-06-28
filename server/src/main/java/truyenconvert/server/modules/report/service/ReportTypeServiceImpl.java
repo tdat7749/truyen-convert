@@ -1,9 +1,12 @@
 package truyenconvert.server.modules.report.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import truyenconvert.server.commons.ResponseSuccess;
 import truyenconvert.server.models.ReportType;
+import truyenconvert.server.models.User;
 import truyenconvert.server.modules.common.service.MappingService;
 import truyenconvert.server.modules.common.service.MessageService;
 import truyenconvert.server.modules.report.dtos.CreateReportTypeDTO;
@@ -11,6 +14,7 @@ import truyenconvert.server.modules.report.dtos.EditReportTypeDTO;
 import truyenconvert.server.modules.report.exceptions.ReportTypeNotFoundException;
 import truyenconvert.server.modules.report.repositories.ReportTypeRepository;
 import truyenconvert.server.modules.report.vm.ReportTypeVm;
+import truyenconvert.server.modules.users.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +25,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     private final ReportTypeRepository reportTypeRepository;
     private final MappingService mappingService;
     private final MessageService messageService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportTypeServiceImpl.class);
 
     public ReportTypeServiceImpl(
             ReportTypeRepository reportTypeRepository,
@@ -33,7 +38,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     }
 
     @Override
-    public ResponseSuccess<ReportTypeVm> createReportType(CreateReportTypeDTO dto) {
+    public ResponseSuccess<ReportTypeVm> createReportType(CreateReportTypeDTO dto, User user) {
         ReportType reportType = ReportType.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
@@ -43,6 +48,8 @@ public class ReportTypeServiceImpl implements ReportTypeService{
                 .build();
 
         reportTypeRepository.save(reportType);
+
+        LOGGER.info("{} {} tạo loại báo cáo.",user.getRole().toString(),user.getEmail());
 
         return new ResponseSuccess<>(
                 messageService.getMessage("report-type.create.success")
@@ -59,7 +66,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     }
 
     @Override
-    public ResponseSuccess<ReportTypeVm> editReportType(EditReportTypeDTO dto,int id) {
+    public ResponseSuccess<ReportTypeVm> editReportType(EditReportTypeDTO dto,int id, User user) {
         var reportTypeFound = this.findById(id).orElse(null);
         if(reportTypeFound == null){
             throw new ReportTypeNotFoundException(messageService.getMessage("report-type.not-found"));
@@ -69,6 +76,8 @@ public class ReportTypeServiceImpl implements ReportTypeService{
         reportTypeFound.setDescription(dto.getDescription());
         reportTypeFound.setNote(dto.getNote());
         reportTypeFound.setUpdatedAt(LocalDateTime.now());
+
+        LOGGER.info("{} {} chỉnh sửa loại báo cáo {}.",user.getRole().toString(),user.getEmail(),reportTypeFound.getTitle());
 
         return new ResponseSuccess<>(
                 messageService.getMessage("report-type.edit.success")

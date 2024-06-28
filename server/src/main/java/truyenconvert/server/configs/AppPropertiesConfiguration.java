@@ -14,4 +14,8 @@ public class AppPropertiesConfiguration {
     private String refreshTokenTime;
     private String secretKey;
     private String apiPrefix;
+    private String accessKeyAwsUser;
+    private String secretKeyAwsUser;
+    private String awsRegion;
+    private String defaultAvatar;
 }

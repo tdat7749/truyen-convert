@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
+import truyenconvert.server.models.enums.Role;
 
 @Configuration
 @EnableWebSecurity
@@ -44,6 +45,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,String.format("%s/auth/sign-out",apiPrefix)).permitAll()
 
                         //user
+
+                        //file storage test
+                        .requestMatchers(HttpMethod.POST,String.format("%s/storages/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
                 )
                 .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

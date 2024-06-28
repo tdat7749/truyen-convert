@@ -1,8 +1,8 @@
 package truyenconvert.server.modules.auth.service;
 
-import ch.qos.logback.classic.LoggerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +25,9 @@ import java.time.LocalDateTime;
 
 @Service
 public class AuthServiceImpl implements AuthService{
+
+    @Value("${truyencv.default-avatar}")
+    private String defaultAvatar;
 
     private final UserService userService;
     private final JwtService jwtService;
@@ -85,7 +88,7 @@ public class AuthServiceImpl implements AuthService{
         var newUser = User.builder()
                 .email(emailLowerCase)
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .avatar("default avatar")
+                .avatar(defaultAvatar)
                 .displayName(dto.getDisplayName())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
