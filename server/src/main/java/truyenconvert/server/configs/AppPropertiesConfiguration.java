@@ -18,4 +18,8 @@ public class AppPropertiesConfiguration {
     private String secretKeyAwsUser;
     private String awsRegion;
     private String defaultAvatar;
+    private String bucketName;
+    private String avatars;
+    private String thumbnails;
+    private int pageSize;
 }

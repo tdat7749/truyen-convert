@@ -69,7 +69,8 @@ public class AppConfiguration {
                 "classpath:/service_messages/auth-messages",
                 "classpath:/service_messages/user-messages",
                 "classpath:/service_messages/report-type-messages",
-                "classpath:/service_messages/file-storage-messages"
+                "classpath:/service_messages/file-storage-messages",
+                "classpath:/service_messages/report-messages"
         );
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;

@@ -46,8 +46,18 @@ public class SecurityConfiguration {
 
                         //user
 
-                        //file storage test
-                        .requestMatchers(HttpMethod.POST,String.format("%s/storages/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+
+                        //report
+                        .requestMatchers(HttpMethod.GET,String.format("%s/reports/admin",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.GET,String.format("%s/reports/user",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/reports/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.POST,String.format("%s/reports/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+
+                        //report type
+                        .requestMatchers(HttpMethod.GET,String.format("%s/rptypes/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/rptypes/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.POST,String.format("%s/rptypes/",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
+
                 )
                 .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
