@@ -3,6 +3,7 @@ package truyenconvert.server.modules.book.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import truyenconvert.server.commons.ResponseSuccess;
+import truyenconvert.server.models.Book;
 import truyenconvert.server.models.User;
 import truyenconvert.server.modules.book.dtos.CreateBookDTO;
 import truyenconvert.server.modules.book.dtos.EditBookDTO;
@@ -10,9 +11,12 @@ import truyenconvert.server.modules.book.vm.BookDetailVm;
 import truyenconvert.server.modules.book.vm.BookVm;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface BookService {
+    Optional<Book> findById(int id);
+    Optional<Book> findBySlug(String slug);
     ResponseSuccess<Boolean> createBook(CreateBookDTO dto, User user);
     ResponseSuccess<Boolean> setVip(int bookId, User user); // để có thể set tiền chương truyện
     ResponseSuccess<Boolean> editBook(EditBookDTO dto, User user);

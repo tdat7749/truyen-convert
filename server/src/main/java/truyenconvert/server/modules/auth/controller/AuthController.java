@@ -29,7 +29,7 @@ public class AuthController {
 
     @PostMapping(value = "/sign-in")
     @ResponseBody
-    public ResponseEntity<ResponseSuccess<TokenVm>> signIn(@RequestBody SignInDTO dto){
+    public ResponseEntity<ResponseSuccess<TokenVm>> signIn(@RequestBody @Valid SignInDTO dto){
         var result = authService.signIn(dto);
 
         return new ResponseEntity<>(result,HttpStatus.OK);

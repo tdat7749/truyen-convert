@@ -3,6 +3,7 @@ package truyenconvert.server.modules.book.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import truyenconvert.server.commons.ResponseSuccess;
+import truyenconvert.server.models.Book;
 import truyenconvert.server.models.User;
 import truyenconvert.server.modules.book.dtos.CreateBookDTO;
 import truyenconvert.server.modules.book.dtos.EditBookDTO;
@@ -11,6 +12,7 @@ import truyenconvert.server.modules.book.vm.BookDetailVm;
 import truyenconvert.server.modules.book.vm.BookVm;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService{
@@ -19,6 +21,16 @@ public class BookServiceImpl implements BookService{
 
     public BookServiceImpl(BookRepository bookRepository){
         this.bookRepository = bookRepository;
+    }
+
+    @Override
+    public Optional<Book> findById(int id) {
+        return bookRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Book> findBySlug(String slug) {
+        return bookRepository.findBySlug(slug);
     }
 
     @Override

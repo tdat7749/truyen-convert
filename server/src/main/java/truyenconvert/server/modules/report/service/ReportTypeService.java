@@ -19,4 +19,6 @@ public interface ReportTypeService {
     ResponseSuccess<ReportTypeVm> editReportType(EditReportTypeDTO dto,int id, User user);
     Optional<ReportType> findById(int id);
     List<ReportType> getAll(Sort.Direction sort,String field);
+
+    ResponseSuccess<ReportTypeVm> getReportTypeById(int id); // for admin
 }

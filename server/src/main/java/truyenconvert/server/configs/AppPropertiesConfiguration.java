@@ -22,4 +22,7 @@ public class AppPropertiesConfiguration {
     private String avatars;
     private String thumbnails;
     private int pageSize;
+    private String salt;
+    private String aes;
+    private String AesCipherAlgorithm;
 }

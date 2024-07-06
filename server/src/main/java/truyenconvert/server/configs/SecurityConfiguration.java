@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
 
+
                         //authentication
                         .requestMatchers(HttpMethod.POST,String.format("%s/auth/sign-in",apiPrefix)).permitAll()
                         .requestMatchers(HttpMethod.POST,String.format("%s/auth/sign-up",apiPrefix)).permitAll()
@@ -52,12 +53,27 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET,String.format("%s/reports/user",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.PATCH,String.format("%s/reports/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.POST,String.format("%s/reports/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.GET,String.format("%s/reports/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
 
                         //report type
                         .requestMatchers(HttpMethod.GET,String.format("%s/rptypes/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.PATCH,String.format("%s/rptypes/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.POST,String.format("%s/rptypes/",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.GET,String.format("%s/rptypes/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
 
+                        // author
+                        .requestMatchers(HttpMethod.GET,String.format("%s/authors/{id}",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.GET,String.format("%s/authors/",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/authors/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
+
+                        // chapter
+                        .requestMatchers(HttpMethod.GET,String.format("%s/chapters/{slug}/all",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.GET,String.format("%s/chapters/{id}",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.POST,String.format("%s/chapters/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}/unlock",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}/coin",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.DELETE,String.format("%s/chapters/{id}",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
                 )
                 .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

@@ -14,7 +14,6 @@ import truyenconvert.server.modules.report.dtos.EditReportTypeDTO;
 import truyenconvert.server.modules.report.exceptions.ReportTypeNotFoundException;
 import truyenconvert.server.modules.report.repositories.ReportTypeRepository;
 import truyenconvert.server.modules.report.vm.ReportTypeVm;
-import truyenconvert.server.modules.users.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -93,5 +92,17 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     @Override
     public List<ReportType> getAll(Sort.Direction sort,String field) {
         return reportTypeRepository.findAll(Sort.by(sort,field));
+    }
+
+    @Override
+    public ResponseSuccess<ReportTypeVm> getReportTypeById(int id) {
+        var reportTypeFound = this.findById(id).orElse(null);
+        if(reportTypeFound == null){
+            throw new ReportTypeNotFoundException(messageService.getMessage("report-type.not-found"));
+        }
+
+        ReportTypeVm reportTypeVm = mappingService.getReportTypeVm(reportTypeFound);
+
+        return new ResponseSuccess<>("Thành công.",reportTypeVm);
     }
 }

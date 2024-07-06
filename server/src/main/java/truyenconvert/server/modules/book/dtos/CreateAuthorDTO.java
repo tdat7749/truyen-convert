@@ -1,5 +1,6 @@
 package truyenconvert.server.modules.book.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Builder
@@ -8,5 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateAuthorDTO {
-    private int id;
+    @JsonProperty("author_name")
+    private String authorName;
+    @JsonProperty("original_author_name")
+    private String originalAuthorName;
 }

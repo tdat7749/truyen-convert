@@ -18,4 +18,5 @@ public interface ReportService {
     ResponseSuccess<ResponsePaging<List<ReportVm>>> getAllReportForAdmin(int pageIndex, int reportStatus,String sort);
     ResponseSuccess<ResponsePaging<List<ReportVm>>> getAllReportForUser(int pageIndex,int reportStatus,String sort,User user);
     Optional<Report> findById(int id);
+    ResponseSuccess<ReportVm> getReportById(int id); // for admin
 }

@@ -143,4 +143,16 @@ public class ReportServiceImpl implements ReportService{
     public Optional<Report> findById(int id) {
         return reportRepository.findById(id);
     }
+
+    @Override
+    public ResponseSuccess<ReportVm> getReportById(int id) {
+        var reportFound = this.findById(id).orElse(null);
+        if(reportFound == null){
+            throw new ReportNotFoundException(messageService.getMessage("report.not-found"));
+        }
+
+        ReportVm reportVm = mappingService.getReportVm(reportFound);
+
+        return new ResponseSuccess<>("Thành công.",reportVm);
+    }
 }

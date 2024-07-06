@@ -54,4 +54,18 @@ public class UserExceptionHandler {
         LOGGER.warn(ex.getMessage());
         return new ResponseError(HttpStatus.BAD_REQUEST,400, ex.getMessage());
     }
+
+    @ExceptionHandler(UserNotEnoughCoinException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError userNotEnoughCoinExceptionHandler(UserNotEnoughCoinException ex){
+        LOGGER.warn(ex.getMessage());
+        return new ResponseError(HttpStatus.BAD_REQUEST,400, ex.getMessage());
+    }
+
+    @ExceptionHandler(UserHasUnlockedChapterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError userHasUnlockedChapterExceptionHandler(UserHasUnlockedChapterException ex){
+        LOGGER.warn(ex.getMessage());
+        return new ResponseError(HttpStatus.BAD_REQUEST,400, ex.getMessage());
+    }
 }
