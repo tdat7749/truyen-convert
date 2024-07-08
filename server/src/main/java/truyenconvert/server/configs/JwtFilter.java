@@ -51,7 +51,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 Pair.of(String.format("%s/auth/sign-up",apiPrefix),HttpMethod.POST),
                 Pair.of(String.format("%s/auth/sign-out",apiPrefix),HttpMethod.POST),
                 Pair.of(String.format("%s/chapters/{slug}/all",apiPrefix),HttpMethod.GET),
-                Pair.of(String.format("%s/chapters/{id}",apiPrefix),HttpMethod.GET)
+                Pair.of(String.format("%s/chapters/{chapter}/book/{slug}",apiPrefix),HttpMethod.GET),
+                Pair.of(String.format("%s/books/{slug}",apiPrefix),HttpMethod.GET)
         );
 
         String requestPath = request.getServletPath();

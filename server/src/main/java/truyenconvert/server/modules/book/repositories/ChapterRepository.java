@@ -10,11 +10,14 @@ import truyenconvert.server.models.Book;
 import truyenconvert.server.models.Chapter;
 import truyenconvert.server.models.User;
 
+import java.util.Optional;
+
 @Repository
 public interface ChapterRepository extends JpaRepository<Chapter,Integer> {
 
-    @Query("Select c.chapter FROM Chapter as c order by c.chapter desc limit 1")
-    int getNewestChaperOfBook(Book book);
+    @Query("Select c.chapter FROM Chapter as c where c.book =:book order by c.chapter desc limit 1")
+    Integer getNewestChaperOfBook(Book book);
+
 
 
     @Query("SELECT c FROM Chapter as c where c.book =: book")
@@ -22,4 +25,7 @@ public interface ChapterRepository extends JpaRepository<Chapter,Integer> {
 
     @Query(value = "SELECT CASE WHEN count(uc) > 0 THEN TRUE ELSE FALSE END from unlock_chapter as uc where uc.user_id =:userId AND uc.chapter_id =:chapterId",nativeQuery = true)
     Boolean existsByUserAndChapter(@Param("userId") int userId,@Param("chapterId") int chapterId);
+
+    @Query("SELECT c FROM Chapter as c where c.book =:book and c.chapter =:chapter")
+    Optional<Chapter> findByBookAndChapter(Book book, int chapter);
 }

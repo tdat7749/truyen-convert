@@ -2,9 +2,10 @@ package truyenconvert.server.modules.common.service;
 
 import org.springframework.stereotype.Service;
 import truyenconvert.server.models.*;
-import truyenconvert.server.modules.book.vm.AuthorVm;
-import truyenconvert.server.modules.book.vm.ChapterDetailVm;
-import truyenconvert.server.modules.book.vm.ChapterVm;
+import truyenconvert.server.modules.book.vm.*;
+import truyenconvert.server.modules.classifies.vm.CategoryVm;
+import truyenconvert.server.modules.classifies.vm.SectVm;
+import truyenconvert.server.modules.classifies.vm.WorldContextVm;
 import truyenconvert.server.modules.report.vm.ReportTypeVm;
 import truyenconvert.server.modules.report.vm.ReportVm;
 import truyenconvert.server.modules.users.vm.UserVm;
@@ -25,5 +26,11 @@ public interface MappingService {
 
     ChapterVm getChapterVm(Chapter chapter);
 
-    ChapterDetailVm getChapterDetailVm(Chapter chapter, String hashCode,boolean isUnlocked) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
+    ChapterDetailVm getChapterDetailVm(Book book,Chapter chapter, String hashCode,boolean isUnlocked,int currentNewestChapter) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
+
+    BookVm getBookVm(Book book);
+    SectVm getSectVm(Sect sect);
+    WorldContextVm getWorldContextVm(WorldContext worldContext);
+    CategoryVm getCategoryVm(Category category);
+    PosterVm getPosterVm(String thumbnail);
 }

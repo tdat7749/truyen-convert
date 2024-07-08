@@ -67,14 +67,15 @@ public class ChapterController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{chapter}/book/{slug}")
     @ResponseBody
     public ResponseEntity<ResponseSuccess<ChapterDetailVm>> getChapterContent(
-            @PathVariable("id") int id,
+            @PathVariable("chapter") int chapter,
+            @PathVariable("slug") String slug,
             @RequestParam(value = "hash_code",defaultValue = "M0uYgNXka8Yb5qie") String hashCode,
             @AuthenticationPrincipal User user
     ) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        var result = chapterService.getChapterContent(id,hashCode,user);
+        var result = chapterService.getChapterContent(chapter,slug,hashCode,user);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

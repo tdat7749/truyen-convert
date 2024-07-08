@@ -68,12 +68,15 @@ public class SecurityConfiguration {
 
                         // chapter
                         .requestMatchers(HttpMethod.GET,String.format("%s/chapters/{slug}/all",apiPrefix)).permitAll()
-                        .requestMatchers(HttpMethod.GET,String.format("%s/chapters/{id}",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.GET,String.format("%s/chapters/{chapter}/book/{slug}",apiPrefix)).permitAll()
                         .requestMatchers(HttpMethod.POST,String.format("%s/chapters/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}/unlock",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}/coin",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.DELETE,String.format("%s/chapters/{id}",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+
+                        // book
+                        .requestMatchers(HttpMethod.GET,String.format("%s/books/{slug}",apiPrefix)).permitAll()
                 )
                 .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

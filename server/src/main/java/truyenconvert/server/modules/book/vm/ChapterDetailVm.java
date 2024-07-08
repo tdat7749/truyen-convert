@@ -23,4 +23,12 @@ public class ChapterDetailVm {
     @JsonProperty("unlock_coin")
     private long unLockCoin;
     private int chapter;
+    @JsonProperty("previous_chapter")
+    private String previousChapter;
+    @JsonProperty("next_chapter")
+    private String nextChapter;
+    @JsonProperty("total_chapter")
+    private int totalChapter;
+    @JsonProperty("is_unlock")
+    private boolean isUnlock;
 }

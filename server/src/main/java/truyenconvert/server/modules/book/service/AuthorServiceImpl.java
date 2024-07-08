@@ -73,6 +73,7 @@ public class AuthorServiceImpl implements AuthorService{
 
         authorFound.setAuthorName(dto.getAuthorName());
         authorFound.setOriginalAuthorName(dto.getOriginalAuthorName());
+        authorFound.setUpdatedAt(LocalDateTime.now());
 
         authorRepository.save(authorFound);
         LOGGER.info("{} {} chỉnh sửa tác giả {} - {}",user.getRole().name(),user.getEmail(),authorFound.getAuthorName(),authorFound.getOriginalAuthorName());

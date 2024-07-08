@@ -3,6 +3,7 @@ package truyenconvert.server.modules.book.service;
 import org.apache.logging.log4j.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,7 +55,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     public ChapterServiceImpl(
             ChapterRepository chapterRepository,
-            BookService bookService,
+            @Lazy BookService bookService,
             MessageService messageService,
             MappingService mappingService,
             UserService userService
@@ -68,6 +69,7 @@ public class ChapterServiceImpl implements ChapterService {
 
 
     @Override
+    @Transactional
     public ResponseSuccess<Boolean> createChapter(CreateChapterDTO dto, User user) {
         var bookFound = bookService.findById(dto.getBookId()).orElse(null);
         if(bookFound == null){
@@ -82,7 +84,13 @@ public class ChapterServiceImpl implements ChapterService {
             throw new NotCreaterOfBookException(messageService.getMessage("book.not-the-creater"));
         }
 
-        int newestChaperOfBook = chapterRepository.getNewestChaperOfBook(bookFound) + 1;
+        int newestChaperOfBook = 1;
+        Integer currentNewestChapter = chapterRepository.getNewestChaperOfBook(bookFound);
+        if(currentNewestChapter != null){
+            newestChaperOfBook = currentNewestChapter + 1;
+        }
+
+
 
         Chapter chapter = Chapter.builder()
                 .title(dto.getTitle())
@@ -91,12 +99,15 @@ public class ChapterServiceImpl implements ChapterService {
                 .updatedAt(LocalDateTime.now())
                 .chapter(newestChaperOfBook)
                 .unLockCoin(dto.getUnLockCoin())
+                .wordCount(this.countWord(dto.getContent()))
                 .build();
 
         if(dto.getTimeExpired() != null){
             chapter.setTimeExpired(dto.getTimeExpired());
         }
 
+        bookFound.setNewChapAt(LocalDateTime.now());
+        bookService.save(bookFound);
         var save = chapterRepository.save(chapter);
         LOGGER.info("{} tạo một chương truyện ID = {}",user.getEmail(),save.getId());
         return new ResponseSuccess<>(messageService.getMessage("chapter.create.success"), true);
@@ -160,23 +171,29 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public ResponseSuccess<ChapterDetailVm> getChapterContent(int id,String hashCode,User user) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        var chapterFound = this.findById(id).orElse(null);
+    public ResponseSuccess<ChapterDetailVm> getChapterContent(int chapter,String slug,String hashCode,User user) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        var bookOfChapter = bookService.findBySlug(slug).orElse(null);
+        if(bookOfChapter == null){
+            throw new BookNotFoundException(messageService.getMessage("book.not-found"));
+        }
+
+        if(bookOfChapter.isDeleted()){
+            throw new BookHadBeenDeletedException(messageService.getMessage("book.had-been-deleted"));
+        }
+
+        var chapterFound = chapterRepository.findByBookAndChapter(bookOfChapter,chapter).orElse(null);
         if(chapterFound == null){
             throw new ChapterNotFoundException(messageService.getMessage("chapter.not-found"));
         }
 
-        Book bookOfChapter = chapterFound.getBook();
-        if(bookOfChapter.isDeleted()){
-            throw new BookHadBeenDeletedException(messageService.getMessage("book.had-been-deleted"));
-        }
         boolean isUnlocked = false;
 
         if(user != null){
             isUnlocked = chapterRepository.existsByUserAndChapter(user.getId(),chapterFound.getId());
         }
 
-        ChapterDetailVm chapterDetailVm = mappingService.getChapterDetailVm(chapterFound,hashCode,isUnlocked);
+        Integer currentNewestChapter = chapterRepository.getNewestChaperOfBook(bookOfChapter);
+        ChapterDetailVm chapterDetailVm = mappingService.getChapterDetailVm(bookOfChapter,chapterFound,hashCode,isUnlocked,currentNewestChapter);
 
         return new ResponseSuccess<>("Thành công.",chapterDetailVm);
     }
@@ -274,6 +291,7 @@ public class ChapterServiceImpl implements ChapterService {
         }
 
         chapterFound.setUnLockCoin(dto.getCoin());
+        chapterFound.setUpdatedAt(LocalDateTime.now());
         if(dto.getTimeExpired() != null){
             chapterFound.setTimeExpired(dto.getTimeExpired());
         }
@@ -289,5 +307,12 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public Optional<Chapter> findById(int id) {
         return chapterRepository.findById(id);
+    }
+
+
+
+    private long countWord(String content){
+        String[] sp = content.split(" ");
+        return sp.length;
     }
 }

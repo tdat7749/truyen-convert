@@ -49,4 +49,16 @@ public class BookExceptionHandler {
     public ResponseError chapterNotFoundExceptionHandler(ChapterNotFoundException ex){
         return new ResponseError(HttpStatus.NOT_FOUND,400,ex.getMessage());
     }
+
+    @ExceptionHandler(BookSlugUsedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError bookSlugUsedExceptionHandler(BookSlugUsedException ex){
+        return new ResponseError(HttpStatus.BAD_REQUEST,400,ex.getMessage());
+    }
+
+    @ExceptionHandler(BookAlreadyExistException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError bookAlreadyExistExceptionHandler(BookAlreadyExistException ex){
+        return new ResponseError(HttpStatus.BAD_REQUEST,400,ex.getMessage());
+    }
 }

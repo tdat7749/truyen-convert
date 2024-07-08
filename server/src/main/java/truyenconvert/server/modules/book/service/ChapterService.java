@@ -3,6 +3,7 @@ package truyenconvert.server.modules.book.service;
 import org.springframework.stereotype.Service;
 import truyenconvert.server.commons.ResponsePaging;
 import truyenconvert.server.commons.ResponseSuccess;
+import truyenconvert.server.models.Book;
 import truyenconvert.server.models.Chapter;
 import truyenconvert.server.models.User;
 import truyenconvert.server.modules.book.dtos.CreateChapterDTO;
@@ -25,7 +26,7 @@ public interface ChapterService {
     ResponseSuccess<Boolean> createChapter(CreateChapterDTO dto, User user);
     ResponseSuccess<Boolean> editChapter(EditChapterDTO dto,int id, User user);
     ResponseSuccess<ResponsePaging<List<ChapterVm>>> getAllChapter(int pageIndex, String bookSlug);
-    ResponseSuccess<ChapterDetailVm> getChapterContent(int id,String hashCode,User user) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
+    ResponseSuccess<ChapterDetailVm> getChapterContent(int chapter,String slug,String hashCode,User user) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
     ResponseSuccess<Boolean> unlockChapter(int chapterId, User user);
 
     ResponseSuccess<Boolean> deleteChapter(int chapterId,User user);

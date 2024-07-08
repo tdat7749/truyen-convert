@@ -8,8 +8,9 @@ import lombok.Data;
 @Builder
 public class UserVm {
     private int id;
-    private String email;
     @JsonProperty("display_name")
     private String displayName;
     private String avatar;
+    private int level;
+    private long exp;
 }

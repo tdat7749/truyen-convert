@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "stories",indexes = {
+@Table(name = "books",indexes = {
         @Index(name = "idx_slug",columnList = "slug"),
         @Index(name = "idx_is_vip",columnList = "is_vip"),
         @Index(name = "idx_story_state",columnList = "state"),
@@ -44,8 +44,20 @@ public class Book {
     private String introduction;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "0")
+    @ColumnDefault(value = "'0'")
     private long view;
+
+    @Column(nullable = false,name = "count_word")
+    @ColumnDefault(value = "'0'")
+    private long countWord;
+
+    @Column(nullable = false,name = "count_comment")
+    @ColumnDefault(value = "'0'")
+    private long countComment;
+
+    @Column(nullable = false,name = "count_evaluation")
+    @ColumnDefault(value = "'0'")
+    private long countEvaluation;
 
 
     @Column(nullable = false,name = "original_name")
@@ -56,10 +68,11 @@ public class Book {
     private String originalLink;
 
     @Column(nullable = false,name = "is_vip")
-    @ColumnDefault(value = "false")
+    @ColumnDefault(value = "'false'")
     private boolean isVip;
 
     @Column(nullable = false)
+    @ColumnDefault(value = "'5'")
     private double score;
 
     @Column(nullable = false,name = "is_deleted")
