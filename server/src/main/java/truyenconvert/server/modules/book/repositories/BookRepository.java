@@ -14,4 +14,16 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
 
     @Query("SELECT count(c) from Chapter as c where c.book =:book")
     Long getTotalChapterOfBook(Book book);
+
+    @Query("SELECT count(c) from Comment as c where c.book =:book")
+    Long getTotalCommentOfBook(Book book);
+
+    @Query("SELECT count(e) from Evaluation  as e where e.book =:book")
+    Long getTotalReviewOfBook(Book book);
+
+    @Query("SELECT sum(c.wordCount)  from Chapter  as c where c.book =:book")
+    Long getTotalWordOfBook(Book book);
+
+    @Query("SELECT sum(c.viewCount) from Chapter as c where c.book =:book")
+    Long getTotalViewOfBook(Book book);
 }
