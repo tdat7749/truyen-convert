@@ -6,9 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Data
@@ -32,6 +35,13 @@ public class Chapter {
 
     @Column(nullable = false,name = "unlock_coin")
     private long unLockCoin;
+
+    @Column(nullable = false,name = "word_count")
+    private long wordCount;
+
+    @Column(nullable = false,name = "view_count")
+    @ColumnDefault(value = "'0'")
+    private long viewCount;
 
     @Column(name = "time_expired")
     private LocalDateTime timeExpired;

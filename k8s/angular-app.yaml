@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-app
+  labels:
+    app: angular-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: angular-app
+  template:
+    metadata:
+      name: angular-app
+      labels:
+        app: angular-app
+    spec:
+      containers:
+        - name: angular-app
+          image: hyperiondat/truyencv-angular-app:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 4200
+          resources:
+            limits:
+              cpu: "0.2"
+              memory: "10Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-app
+spec:
+  selector:
+    app: angular-app
+  ports:
+    - name: http
+      port: 4200
+      targetPort: 4200
+  type: NodePort

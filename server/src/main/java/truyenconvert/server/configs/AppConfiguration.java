@@ -67,7 +67,13 @@ public class AppConfiguration {
         messageSource.setBasenames(
                 "classpath:/service_messages/validation-messages",
                 "classpath:/service_messages/auth-messages",
-                "classpath:/service_messages/user-messages"
+                "classpath:/service_messages/user-messages",
+                "classpath:/service_messages/report-type-messages",
+                "classpath:/service_messages/file-storage-messages",
+                "classpath:/service_messages/report-messages",
+                "classpath:/service_messages/chapter-messages",
+                "classpath:/service_messages/book-messages",
+                "classpath:/service_messages/author-messages"
         );
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
