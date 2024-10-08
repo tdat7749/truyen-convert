@@ -62,6 +62,8 @@ services:
     image: 'redis:latest'
     ports:
       - '${REDIS_PORT}:${REDIS_PORT}'
+    volumes:
+      - '${REDIS_VOLUME}:/data'
     expose:
       - ${REDIS_PORT}
 volumes:

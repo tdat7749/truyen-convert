@@ -2,6 +2,7 @@ package truyenconvert.server.modules.book.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import truyenconvert.server.commons.ResponsePaging;
 import truyenconvert.server.commons.ResponseSuccess;
 import truyenconvert.server.models.Book;
 import truyenconvert.server.models.User;
@@ -25,13 +26,13 @@ public interface BookService {
     ResponseSuccess<String> changeThumbnail(MultipartFile file, User user);
     ResponseSuccess<BookVm> getBookBySlug(String slug);
     ResponseSuccess<BookVm> getBookById(int id);
-    ResponseSuccess<List<BookVm>> getAllPublicBook(int limits, int pageIndex, String sortBy, String keyword, int world, int sect, int cate, BookStatus status, int isVip);
-    ResponseSuccess<List<BookVm>> getAllBook(int limits, int pageIndex, String sortBy, String keyword, int world, int sect, int cate, BookStatus status, BookState state, int isVip);
+    ResponseSuccess<ResponsePaging<List<BookVm>>> getAllPublicBook(int limits, int pageIndex, String sortBy, String keyword, Integer world, Integer sect, Integer cate, Integer isVip);
+    ResponseSuccess<ResponsePaging<List<BookVm>>> getAllBook(int limits, int pageIndex, String sortBy, String keyword, Integer world, Integer sect, Integer cate, BookStatus status, BookState state, Integer isVip);
     ResponseSuccess<Boolean> changeCreaterOfBook(int userId,int bookId, User user);
     ResponseSuccess<List<BookVm>> getAllBookOfUser(int limits,int pageIndex, String sortBy,String keyword,int status, int state,int isVip);
     ResponseSuccess<Boolean> deleteBook(int bookId,User user); // phải là admin hoặc mod mới được xóa, nếu user muốn xóa thì dùng report yêu cầu xóa.
     ResponseSuccess<Boolean> softDeleteBook(int bookId,User user);
-    ResponseSuccess<Boolean> changeBookStatus(int bookId,User user);
+    ResponseSuccess<Boolean> changeBookStatus(int bookId,BookStatus status,User user);
     ResponseSuccess<Boolean> unVip(int bookId,User user); // khi unvip thì sẽ hủy mua toàn bộ các chương truyện -> thành free hết.
 
     // get book by creater

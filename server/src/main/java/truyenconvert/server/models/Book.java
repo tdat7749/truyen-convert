@@ -24,7 +24,9 @@ import java.util.List;
         @Index(name = "idx_is_vip",columnList = "is_vip"),
         @Index(name = "idx_story_state",columnList = "state"),
         @Index(name = "idx_story_status",columnList = "status"),
-        @Index(name = "idx_story_deleted",columnList = "is_deleted")
+        @Index(name = "idx_story_deleted",columnList = "is_deleted"),
+        @Index(name = "idx_story_originName",columnList = "original_name"),
+        @Index(name = "idx_story_newChapAt",columnList = "new_chap_at")
 })
 public class Book {
     @Id

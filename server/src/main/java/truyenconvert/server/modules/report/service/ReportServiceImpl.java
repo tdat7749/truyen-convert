@@ -3,6 +3,8 @@ package truyenconvert.server.modules.report.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -50,6 +52,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
+    @CacheEvict(value = "reports",allEntries = true)
     public ResponseSuccess<ReportVm> createReport(CreateReportDTO dto, User user) {
         var reportTypeFound = reportTypeService.findById(dto.getReportTypeId()).orElse(null);
         if(reportTypeFound == null){
@@ -72,6 +75,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
+    @CacheEvict(value = "reports",allEntries = true)
     public ResponseSuccess<ReportVm> handleReport(int id, User user) {
         var reportFound = this.findById(id).orElse(null);
         if(reportFound == null){
@@ -88,6 +92,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
+    @Cacheable(value = "reports", key = "'pageIndex:' + #pageIndex + 'reportStatus:' + #reportStatus + 'sort:' + #sort")
     public ResponseSuccess<ResponsePaging<List<ReportVm>>> getAllReportForAdmin(int pageIndex, int reportStatus, String sort) {
         var sortBy = Sort.by(Sort.Direction.DESC,"createdAt");
         if (sort.equals("updated_at")){
@@ -114,6 +119,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
+    @Cacheable(value = "reports", key = "'pageIndex:' + #pageIndex + 'reportStatus:' + #reportStatus + 'sort:' + #sort + 'user:' + #user.email")
     public ResponseSuccess<ResponsePaging<List<ReportVm>>> getAllReportForUser(int pageIndex,int reportStatus,String sort,User user) {
         var sortBy = Sort.by(Sort.Direction.DESC,"createdAt");
         if (sort.equals("updated_at")){
@@ -145,6 +151,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
+    @Cacheable(value = "reports", key = "#id")
     public ResponseSuccess<ReportVm> getReportById(int id) {
         var reportFound = this.findById(id).orElse(null);
         if(reportFound == null){

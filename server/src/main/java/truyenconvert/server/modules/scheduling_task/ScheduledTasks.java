@@ -32,7 +32,7 @@ public class ScheduledTasks {
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
+//    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void updateBooks(){
         LOGGER.info("Bắt đầu cập nhật bằng scheduling");

@@ -2,6 +2,8 @@ package truyenconvert.server.modules.report.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import truyenconvert.server.commons.ResponseSuccess;
@@ -37,6 +39,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     }
 
     @Override
+    @CacheEvict(value = "reportTypes", allEntries = true)
     public ResponseSuccess<ReportTypeVm> createReportType(CreateReportTypeDTO dto, User user) {
         ReportType reportType = ReportType.builder()
                 .title(dto.getTitle())
@@ -57,6 +60,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     }
 
     @Override
+    @Cacheable(value = "reportTypes", cacheNames = "getAllReportType")
     public ResponseSuccess<List<ReportTypeVm>> getAllReportType() {
         var listReportType = this.getAll(Sort.Direction.ASC,"title");
         var result = listReportType.stream().map(mappingService::getReportTypeVm).toList();
@@ -65,6 +69,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     }
 
     @Override
+    @CacheEvict(value = "reportTypes", allEntries = true)
     public ResponseSuccess<ReportTypeVm> editReportType(EditReportTypeDTO dto,int id, User user) {
         var reportTypeFound = this.findById(id).orElse(null);
         if(reportTypeFound == null){
@@ -95,6 +100,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     }
 
     @Override
+    @Cacheable(value = "reportTypes", key = "#id")
     public ResponseSuccess<ReportTypeVm> getReportTypeById(int id) {
         var reportTypeFound = this.findById(id).orElse(null);
         if(reportTypeFound == null){
