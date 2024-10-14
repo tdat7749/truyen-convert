@@ -493,7 +493,8 @@ public class BookServiceImpl implements BookService {
         return new ResponseSuccess<>(messageService.getMessage("book.un-vip"), true);
     }
 
-    private Long getTotalChapterOfBook(Book book) {
+    @Override
+    public Long getTotalChapterOfBook(Book book) {
         Long total = bookRepository.getTotalChapterOfBook(book);
         if (total == null) {
             return 0L;

@@ -8,5 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveHistoryDTO {
-    private int id;
+    private int bookId;
+    private int chapter;
 }

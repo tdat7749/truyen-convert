@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import truyenconvert.server.modules.book.vm.BookSimpleVm;
 import truyenconvert.server.modules.book.vm.BookVm;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReadHistoryVm {
-    private BookVm book;
+    private BookSimpleVm book;
     private int chapter;
     @JsonProperty("created_at")
     private String createdAt;

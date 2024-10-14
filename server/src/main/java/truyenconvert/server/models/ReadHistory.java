@@ -13,7 +13,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "read_histories")
+@Table(name = "read_histories", indexes = {
+        @Index(name = "idx_user_id", columnList = "user_id"),
+        @Index(name = "idx_book_id", columnList = "book_id"),
+        @Index(name = "idx_chapter", columnList = "chapter")
+})
 public class ReadHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

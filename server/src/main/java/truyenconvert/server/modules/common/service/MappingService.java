@@ -36,4 +36,6 @@ public interface MappingService {
     PosterVm getPosterVm(String thumbnail);
 
     CommentVm getCommentVm(Comment comment);
+
+    BookSimpleVm getBookSimpleVm(Book book);
 }

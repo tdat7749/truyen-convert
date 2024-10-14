@@ -35,6 +35,7 @@ public interface BookService {
     ResponseSuccess<Boolean> changeBookStatus(int bookId,BookStatus status,User user);
     ResponseSuccess<Boolean> unVip(int bookId,User user); // khi unvip thì sẽ hủy mua toàn bộ các chương truyện -> thành free hết.
 
+    Long getTotalChapterOfBook(Book book);
     // get book by creater
     // get book user marked
 }

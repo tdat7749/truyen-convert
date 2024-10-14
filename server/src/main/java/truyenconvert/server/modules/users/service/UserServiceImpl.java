@@ -76,20 +76,26 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         this.save(user);
-        LOGGER.info("Người dùng {} vừa thay đổi mật khẩu thành công",user.getEmail());
+        LOGGER.info(messageService.getMessage("user.log.change-password.success"),user.getId());
         return new ResponseSuccess<>(messageService.getMessage("user.change-password.success"),true);
     }
 
     @Override
     @Transactional
     public ResponseSuccess<Boolean> changeAvatar(MultipartFile file, User user) {
-        var avatarUrl = s3FileStorageService.saveFile(file,avatarsFolder+ "/" + user.getEmail().split("@")[1],bucketName);
+        String folderName = avatarsFolder+ "/" + user.getEmail().split("@")[1];
+        try{
+            var avatarUrl = s3FileStorageService.saveFile(file,folderName,bucketName);
 
-        user.setAvatar(avatarUrl);
-        this.save(user);
+            user.setAvatar(avatarUrl);
+            this.save(user);
+            LOGGER.info(messageService.getMessage("user.log.change-avatar.success"),user.getId());
 
-        LOGGER.info("Người dùng {} vừa thay đổi hình đại diện thành công",user.getEmail());
-
-        return new ResponseSuccess<>(messageService.getMessage("user.change-avatar.success"), true);
+            return new ResponseSuccess<>(messageService.getMessage("user.change-avatar.success"), true);
+        }catch (Exception e){
+            s3FileStorageService.deleteFile(folderName,bucketName);
+            LOGGER.info(messageService.getMessage("user.log.change-avatar.failed"),user.getId());
+            return new ResponseSuccess<>(messageService.getMessage("user.change-avatar.failed"),false);
+        }
     }
 }

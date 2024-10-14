@@ -216,4 +216,16 @@ public class MappingServiceImpl implements MappingService{
                 .updatedAt(comment.getUpdatedAt().toString())
                 .build();
     }
+
+    @Override
+    public BookSimpleVm getBookSimpleVm(Book book) {
+        return BookSimpleVm.builder()
+                .id(book.getId())
+                .slug(book.getSlug())
+                .title(book.getTitle())
+                .posters(getPosterVm(book.getThumbnail()))
+                .createdAt(book.getCreatedAt().toString())
+                .updatedAt(book.getUpdatedAt().toString())
+                .build();
+    }
 }

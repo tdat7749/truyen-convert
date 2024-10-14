@@ -15,7 +15,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "donations")
+@Table(name = "donations", indexes = {
+        @Index(name = "idx_giver_id", columnList = "giver_id"),
+        @Index(name = "idx_book_id", columnList = "book_id"),
+        @Index(name = "idx_poster_id", columnList = "poster_id")
+})
 public class Donation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
