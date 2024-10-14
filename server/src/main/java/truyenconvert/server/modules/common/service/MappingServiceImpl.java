@@ -9,6 +9,7 @@ import truyenconvert.server.modules.book.vm.*;
 import truyenconvert.server.modules.classifies.vm.CategoryVm;
 import truyenconvert.server.modules.classifies.vm.SectVm;
 import truyenconvert.server.modules.classifies.vm.WorldContextVm;
+import truyenconvert.server.modules.comment.vm.CommentVm;
 import truyenconvert.server.modules.report.vm.ReportTypeVm;
 import truyenconvert.server.modules.report.vm.ReportVm;
 import truyenconvert.server.modules.users.vm.UserVm;
@@ -203,6 +204,16 @@ public class MappingServiceImpl implements MappingService{
                 .x150(ob[0] + "150." + ob[1])
                 .x300(ob[0] + "300." + ob[1])
                 .x600(ob[0] + "600." + ob[1])
+                .build();
+    }
+
+    @Override
+    public CommentVm getCommentVm(Comment comment) {
+        return CommentVm.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt().toString())
+                .updatedAt(comment.getUpdatedAt().toString())
                 .build();
     }
 }

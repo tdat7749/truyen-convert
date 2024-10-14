@@ -22,7 +22,7 @@ public interface BookService {
     Book save(Book book);
     ResponseSuccess<BookVm> createBook(CreateBookDTO dto, User user);
     ResponseSuccess<Boolean> setVip(int bookId, User user); // để có thể set tiền chương truyện
-    ResponseSuccess<Boolean> editBook(EditBookDTO dto, User user);
+    ResponseSuccess<BookVm> editBook(EditBookDTO dto,int id, User user);
     ResponseSuccess<String> changeThumbnail(MultipartFile file, User user);
     ResponseSuccess<BookVm> getBookBySlug(String slug);
     ResponseSuccess<BookVm> getBookById(int id);

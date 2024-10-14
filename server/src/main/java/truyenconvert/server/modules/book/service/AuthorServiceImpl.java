@@ -3,6 +3,8 @@ package truyenconvert.server.modules.book.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,6 +32,8 @@ public class AuthorServiceImpl implements AuthorService{
     @Value("${truyencv.page-size}")
     private int pageSize;
 
+    private final String CACHE_VALUE = "authors";
+
     private final AuthorRepository authorRepository;
     private final MessageService messageService;
     private final MappingService mappingService;
@@ -47,6 +51,7 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
+    @CacheEvict(value = CACHE_VALUE, allEntries = true)
     public Author createAuthor(String authorName,String originalAuthorName) {
         var authorFound = authorRepository.findByAuthorNameOrOriginalAuthorName(authorName,originalAuthorName).orElse(null);
         if(authorFound == null){
@@ -65,6 +70,7 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
+    @CacheEvict(value = CACHE_VALUE, allEntries = true)
     public ResponseSuccess<Boolean> editAuthor(EditAuthorDTO dto,int id, User user) {
         var authorFound = this.findById(id).orElse(null);
         if(authorFound == null){
@@ -81,6 +87,7 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
+    @Cacheable(value = CACHE_VALUE, key = "'pageIndex:' + #pageIndex + ',sort:' + #sort + ',keyword' + #keyword")
     public ResponseSuccess<ResponsePaging<List<AuthorVm>>> getAllAuthor(int pageIndex, String sort, String keyword) {
         var sortBy = Sort.by(Sort.Direction.DESC,"createdAt");
         if (sort.equals("a-z")){
@@ -106,6 +113,7 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
+    @Cacheable(value = CACHE_VALUE, key = "#id")
     public ResponseSuccess<AuthorVm> getAuthorById(int id) {
         var authorFound = this.findById(id).orElse(null);
         if(authorFound == null){
@@ -121,4 +129,5 @@ public class AuthorServiceImpl implements AuthorService{
     public Optional<Author> findById(int id) {
         return authorRepository.findById(id);
     }
+
 }

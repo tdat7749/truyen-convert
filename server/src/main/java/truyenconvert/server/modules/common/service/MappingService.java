@@ -6,6 +6,7 @@ import truyenconvert.server.modules.book.vm.*;
 import truyenconvert.server.modules.classifies.vm.CategoryVm;
 import truyenconvert.server.modules.classifies.vm.SectVm;
 import truyenconvert.server.modules.classifies.vm.WorldContextVm;
+import truyenconvert.server.modules.comment.vm.CommentVm;
 import truyenconvert.server.modules.report.vm.ReportTypeVm;
 import truyenconvert.server.modules.report.vm.ReportVm;
 import truyenconvert.server.modules.users.vm.UserVm;
@@ -33,4 +34,6 @@ public interface MappingService {
     WorldContextVm getWorldContextVm(WorldContext worldContext);
     CategoryVm getCategoryVm(Category category);
     PosterVm getPosterVm(String thumbnail);
+
+    CommentVm getCommentVm(Comment comment);
 }

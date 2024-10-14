@@ -49,9 +49,9 @@ public class ReportTypeServiceImpl implements ReportTypeService{
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        reportTypeRepository.save(reportType);
+        var save = reportTypeRepository.save(reportType);
 
-        LOGGER.info("{} {} tạo loại báo cáo.",user.getRole().toString(),user.getEmail());
+        LOGGER.info(messageService.getMessage("report-type.log.create.success"),user.getId(), save.getId());
 
         return new ResponseSuccess<>(
                 messageService.getMessage("report-type.create.success")
@@ -60,7 +60,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     }
 
     @Override
-    @Cacheable(value = "reportTypes", cacheNames = "getAllReportType")
+    @Cacheable(value = "reportTypes")
     public ResponseSuccess<List<ReportTypeVm>> getAllReportType() {
         var listReportType = this.getAll(Sort.Direction.ASC,"title");
         var result = listReportType.stream().map(mappingService::getReportTypeVm).toList();
@@ -73,6 +73,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     public ResponseSuccess<ReportTypeVm> editReportType(EditReportTypeDTO dto,int id, User user) {
         var reportTypeFound = this.findById(id).orElse(null);
         if(reportTypeFound == null){
+            LOGGER.error(messageService.getMessage("report-type.log.not-found"), id);
             throw new ReportTypeNotFoundException(messageService.getMessage("report-type.not-found"));
         }
 
@@ -81,7 +82,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
         reportTypeFound.setNote(dto.getNote());
         reportTypeFound.setUpdatedAt(LocalDateTime.now());
 
-        LOGGER.info("{} {} chỉnh sửa loại báo cáo {}.",user.getRole().toString(),user.getEmail(),reportTypeFound.getTitle());
+        LOGGER.info(messageService.getMessage("report-type.log.edit.success"),user.getId(),reportTypeFound.getId());
 
         return new ResponseSuccess<>(
                 messageService.getMessage("report-type.edit.success")
@@ -104,6 +105,7 @@ public class ReportTypeServiceImpl implements ReportTypeService{
     public ResponseSuccess<ReportTypeVm> getReportTypeById(int id) {
         var reportTypeFound = this.findById(id).orElse(null);
         if(reportTypeFound == null){
+            LOGGER.error(messageService.getMessage("report-type.log.not-found"), id);
             throw new ReportTypeNotFoundException(messageService.getMessage("report-type.not-found"));
         }
 

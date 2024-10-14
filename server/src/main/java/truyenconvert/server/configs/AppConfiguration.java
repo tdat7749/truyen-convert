@@ -73,7 +73,8 @@ public class AppConfiguration {
                 "classpath:/service_messages/report-messages",
                 "classpath:/service_messages/chapter-messages",
                 "classpath:/service_messages/book-messages",
-                "classpath:/service_messages/author-messages"
+                "classpath:/service_messages/author-messages",
+                "classpath:/service_messages/comment-messages"
         );
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;

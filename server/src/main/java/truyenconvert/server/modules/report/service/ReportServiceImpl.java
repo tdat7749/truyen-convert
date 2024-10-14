@@ -56,6 +56,7 @@ public class ReportServiceImpl implements ReportService{
     public ResponseSuccess<ReportVm> createReport(CreateReportDTO dto, User user) {
         var reportTypeFound = reportTypeService.findById(dto.getReportTypeId()).orElse(null);
         if(reportTypeFound == null){
+            LOGGER.error(messageService.getMessage("report-type.log.not-found"),dto.getReportTypeId());
             throw new ReportTypeNotFoundException(messageService.getMessage("report-type.not-found"));
         }
 
@@ -69,7 +70,7 @@ public class ReportServiceImpl implements ReportService{
 
         var save =  reportRepository.save(report);
 
-        LOGGER.info("{} {} tạo một báo cáo.",user.getRole().toString(),user.getEmail());
+        LOGGER.info(messageService.getMessage("report.log.create.success"),user.getId(),save.getId());
 
         return new ResponseSuccess<>(messageService.getMessage("report.create.success"), mappingService.getReportVm(save));
     }
@@ -79,6 +80,7 @@ public class ReportServiceImpl implements ReportService{
     public ResponseSuccess<ReportVm> handleReport(int id, User user) {
         var reportFound = this.findById(id).orElse(null);
         if(reportFound == null){
+            LOGGER.error(messageService.getMessage("report.log.not-found"), id);
             throw new ReportNotFoundException(messageService.getMessage("report.not-found"));
         }
 
@@ -86,7 +88,7 @@ public class ReportServiceImpl implements ReportService{
 
         var save = reportRepository.save(reportFound);
 
-        LOGGER.info("{} {} xử lý báo cáo với ID = {}.",user.getRole().toString(),user.getEmail(),reportFound.getId());
+        LOGGER.info(messageService.getMessage("report.log.handled.success"),user.getId(),reportFound.getId());
 
         return new ResponseSuccess<>(messageService.getMessage("report.handled.success"), mappingService.getReportVm(save));
     }
@@ -155,6 +157,7 @@ public class ReportServiceImpl implements ReportService{
     public ResponseSuccess<ReportVm> getReportById(int id) {
         var reportFound = this.findById(id).orElse(null);
         if(reportFound == null){
+            LOGGER.error(messageService.getMessage("report.log.not-found"), id);
             throw new ReportNotFoundException(messageService.getMessage("report.not-found"));
         }
 

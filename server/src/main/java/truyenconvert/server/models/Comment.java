@@ -18,15 +18,13 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "comments",indexes = {
-        @Index(name = "idx_parent_id",columnList = "parent_id")
+        @Index(name = "idx_parent_id",columnList = "parent_id"),
+        @Index(name = "idx_created_at",columnList = "created_at")
 })
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(name = "parent_id")
-    private int parentId;
 
     @Column(nullable = false,length = 1000)
     private String content;
@@ -36,6 +34,13 @@ public class Comment {
 
     @Column(nullable = false,name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments;
 
     // User
     @ManyToOne

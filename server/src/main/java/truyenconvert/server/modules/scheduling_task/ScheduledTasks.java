@@ -10,6 +10,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import truyenconvert.server.models.Book;
+import truyenconvert.server.models.enums.BookStatus;
 import truyenconvert.server.modules.book.repositories.BookRepository;
 
 import java.util.List;
@@ -54,13 +55,18 @@ public class ScheduledTasks {
         LOGGER.info("Cập nhật cho book với ID = {}",book.getId());
         Long reviewCount = bookRepository.getTotalReviewOfBook(book);
         Long commentCount = bookRepository.getTotalCommentOfBook(book);
-        Long wordCount = bookRepository.getTotalWordOfBook(book);
         Long viewCount = bookRepository.getTotalViewOfBook(book);
 
         book.setCountComment(commentCount != null ? commentCount : 0);
-        book.setCountWord(wordCount != null ? wordCount : 0);
         book.setCountEvaluation(reviewCount != null ? reviewCount : 0);
         book.setView(viewCount != null ? viewCount : 0);
+
+        BookStatus bookStatus = book.getStatus();
+        if(bookStatus.equals(BookStatus.Continued)){
+
+            Long wordCount = bookRepository.getTotalWordOfBook(book);
+            book.setCountWord(wordCount != null ? wordCount : 0);
+        }
 
         bookRepository.save(book);
 

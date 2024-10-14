@@ -3,6 +3,8 @@ package truyenconvert.server.commons;
 
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Builder
@@ -10,7 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResponseSuccess <T> {
+public class ResponseSuccess <T> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String message;
     private T data;
 }

@@ -3,12 +3,18 @@ package truyenconvert.server.commons;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponsePaging<T> {
+public class ResponsePaging<T> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @JsonProperty("page_index")
     private int pageIndex;
     @JsonProperty("page_size")

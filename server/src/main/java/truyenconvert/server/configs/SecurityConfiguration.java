@@ -50,13 +50,13 @@ public class SecurityConfiguration {
 
                         //report
                         .requestMatchers(HttpMethod.GET,String.format("%s/reports/admin",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
-                        .requestMatchers(HttpMethod.GET,String.format("%s/reports/user",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.GET,String.format("%s/reports/user",apiPrefix)).authenticated()
                         .requestMatchers(HttpMethod.PATCH,String.format("%s/reports/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
-                        .requestMatchers(HttpMethod.POST,String.format("%s/reports/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.POST,String.format("%s/reports/",apiPrefix)).authenticated()
                         .requestMatchers(HttpMethod.GET,String.format("%s/reports/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
 
                         //report type
-                        .requestMatchers(HttpMethod.GET,String.format("%s/rptypes/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.GET,String.format("%s/rptypes/",apiPrefix)).permitAll()
                         .requestMatchers(HttpMethod.PATCH,String.format("%s/rptypes/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.POST,String.format("%s/rptypes/",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
                         .requestMatchers(HttpMethod.GET,String.format("%s/rptypes/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name(),Role.MODERATOR.name())
@@ -69,15 +69,25 @@ public class SecurityConfiguration {
                         // chapter
                         .requestMatchers(HttpMethod.GET,String.format("%s/chapters/{slug}/all",apiPrefix)).permitAll()
                         .requestMatchers(HttpMethod.GET,String.format("%s/chapters/{chapter}/book/{slug}",apiPrefix)).permitAll()
-                        .requestMatchers(HttpMethod.POST,String.format("%s/chapters/",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
-                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}/unlock",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
-                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}/coin",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
-                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
-                        .requestMatchers(HttpMethod.DELETE,String.format("%s/chapters/{id}",apiPrefix)).hasAnyRole(Role.USER.name(),Role.ADMIN.name(),Role.MODERATOR.name())
+                        .requestMatchers(HttpMethod.POST,String.format("%s/chapters/",apiPrefix)).authenticated()
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}/unlock",apiPrefix)).authenticated()
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}/coin",apiPrefix)).authenticated()
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/chapters/{id}",apiPrefix)).authenticated()
+                        .requestMatchers(HttpMethod.DELETE,String.format("%s/chapters/{id}",apiPrefix)).authenticated()
 
                         // book
                         .requestMatchers(HttpMethod.GET,String.format("%s/books/{slug}",apiPrefix)).permitAll()
+
+                        // comments
+                        .requestMatchers(HttpMethod.GET,String.format("%s/comments/{slug}",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.GET,String.format("%s/comments/reply/{id}",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.POST,String.format("%s/comments/like/{id}",apiPrefix)).authenticated()
+                        .requestMatchers(HttpMethod.POST,String.format("%s/comments/unlike/{id}",apiPrefix)).authenticated()
+                        .requestMatchers(HttpMethod.POST,String.format("%s/comments/",apiPrefix)).authenticated()
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/comments/{id}",apiPrefix)).authenticated()
+                        .requestMatchers(HttpMethod.DELETE,String.format("%s/comments/{id}",apiPrefix)).authenticated()
                 )
+
                 .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
