@@ -9,10 +9,16 @@ import truyenconvert.server.modules.classifies.vm.SectVm;
 import truyenconvert.server.modules.classifies.vm.WorldContextVm;
 import truyenconvert.server.modules.users.vm.UserVm;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Builder
 @Getter
 @Setter
-public class BookVm {
+public class BookVm implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private int id;
     private String title;
     private String introduction;
