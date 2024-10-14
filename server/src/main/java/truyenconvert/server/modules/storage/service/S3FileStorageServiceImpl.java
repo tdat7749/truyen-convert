@@ -39,9 +39,7 @@ public class S3FileStorageServiceImpl implements S3FileStorageService{
     @Override
     @Transactional
     public String saveFile(MultipartFile file,String folderName, String bucket) {
-        String randomKey = utilitiesService.randomKeyNumber();
         String fullKey = folderName + "/" + "default." + Objects.requireNonNull(file.getContentType()).split("/")[1];
-
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucket)
@@ -90,8 +88,7 @@ public class S3FileStorageServiceImpl implements S3FileStorageService{
         return true;
     }
 
-    @Override
-    public String getFileUrl(String bucketName, String fullKey) {
+    private String getFileUrl(String bucketName, String fullKey) {
         URL url = s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(fullKey));
         return url.toString();
     }
@@ -106,7 +103,7 @@ public class S3FileStorageServiceImpl implements S3FileStorageService{
         return convert;
     }
 
-    public void copyDirectory(String sourceBucket, String destinationBucket, String sourcePrefix, String destinationPrefix) {
+    private void copyDirectory(String sourceBucket, String destinationBucket, String sourcePrefix, String destinationPrefix) {
         ListObjectsV2Request listObjectsV2Request = ListObjectsV2Request.builder()
                 .bucket(sourceBucket)
                 .prefix(sourcePrefix)

@@ -42,6 +42,7 @@ import java.util.Optional;
 @Service
 public class BookServiceImpl implements BookService {
 
+    private final String S3_BUCKET = "truyencv";
     private final String CACHE_VALUE = "books";
     private static final Logger LOGGER = LoggerFactory.getLogger(BookServiceImpl.class);
 
@@ -98,59 +99,66 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @CacheEvict(value = CACHE_VALUE, allEntries = true)
     public ResponseSuccess<BookVm> createBook(CreateBookDTO dto, User user) {
-        var bookFound = bookRepository.findByOriginalNameOrOriginalLink(dto.getOriginalName(), dto.getOriginalLink()).orElse(null);
-        if (bookFound != null) {
-            LOGGER.error(messageService.getMessage("book.log.exists-name-link"),dto.getOriginalName(),dto.getOriginalLink());
-            throw new BookAlreadyExistException(messageService.getMessage("book.exists"));
+        try{
+            var bookFound = bookRepository.findByOriginalNameOrOriginalLink(dto.getOriginalName(), dto.getOriginalLink()).orElse(null);
+            if (bookFound != null) {
+                LOGGER.error(messageService.getMessage("book.log.exists-name-link"),dto.getOriginalName(),dto.getOriginalLink());
+                throw new BookAlreadyExistException(messageService.getMessage("book.exists"));
+            }
+
+            var bookFoundBySlug = this.findBySlug(dto.getSlug()).orElse(null);
+            if (bookFoundBySlug != null) {
+                dto.setSlug(dto.getSlug() + "-" + bookFoundBySlug.getId());
+            }
+
+            var sectFound = sectService.findById(dto.getSectId()).orElse(null);
+            if (sectFound == null) {
+                LOGGER.error(messageService.getMessage("sect.log.not-found"),dto.getSectId());
+                throw new SectNotFoundException(messageService.getMessage("sect.not-found"));
+            }
+
+            var worldContextFound = worldContextService.findById(dto.getWorldContextId()).orElse(null);
+            if (worldContextFound == null) {
+                LOGGER.error(messageService.getMessage("world-context.log.not-found"),dto.getWorldContextId());
+                throw new WorldContextNotFoundException(messageService.getMessage("world-context.not-found"));
+            }
+
+            var categoryFound = categoryService.findById(dto.getCategoryId()).orElse(null);
+            if (categoryFound == null) {
+                LOGGER.error(messageService.getMessage("category.log.not-found"),dto.getCategoryId());
+                throw new CategoryNotFoundException(messageService.getMessage("category.not-found"));
+            }
+
+            Author author = authorService.createAuthor(dto.getAuthorName(), dto.getOriginalAuthorName());
+
+            Book book = Book.builder()
+                    .title(dto.getTitle())
+                    .introduction(dto.getIntroduction())
+                    .slug(dto.getSlug())
+                    .user(user)
+                    .author(author)
+                    .originalLink(dto.getOriginalLink())
+                    .originalName(dto.getOriginalName())
+                    .thumbnail(dto.getThumbnail())
+                    .category(categoryFound)
+                    .worldContext(worldContextFound)
+                    .sect(sectFound)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .newChapAt(LocalDateTime.now())
+                    .build();
+
+            BookVm bookVm = mappingService.getBookVm(book);
+
+            LOGGER.info(messageService.getMessage("book.log.create.success"),user.getId(),book.getId());
+
+            return new ResponseSuccess<>(messageService.getMessage("book.create.success"),bookVm);
+        }catch (Exception e){
+
+            s3FileStorageService.deleteFile(dto.getThumbnail(),S3_BUCKET);
+
+            return new ResponseSuccess<>(messageService.getMessage("book.create.failed"), null);
         }
-
-        var bookFoundBySlug = this.findBySlug(dto.getSlug()).orElse(null);
-        if (bookFoundBySlug != null) {
-            dto.setSlug(dto.getSlug() + "-" + bookFoundBySlug.getId());
-        }
-
-        var sectFound = sectService.findById(dto.getSectId()).orElse(null);
-        if (sectFound == null) {
-            LOGGER.error(messageService.getMessage("sect.log.not-found"),dto.getSectId());
-            throw new SectNotFoundException(messageService.getMessage("sect.not-found"));
-        }
-
-        var worldContextFound = worldContextService.findById(dto.getWorldContextId()).orElse(null);
-        if (worldContextFound == null) {
-            LOGGER.error(messageService.getMessage("world-context.log.not-found"),dto.getWorldContextId());
-            throw new WorldContextNotFoundException(messageService.getMessage("world-context.not-found"));
-        }
-
-        var categoryFound = categoryService.findById(dto.getCategoryId()).orElse(null);
-        if (categoryFound == null) {
-            LOGGER.error(messageService.getMessage("category.log.not-found"),dto.getCategoryId());
-            throw new CategoryNotFoundException(messageService.getMessage("category.not-found"));
-        }
-
-        Author author = authorService.createAuthor(dto.getAuthorName(), dto.getOriginalAuthorName());
-
-        Book book = Book.builder()
-                .title(dto.getTitle())
-                .introduction(dto.getIntroduction())
-                .slug(dto.getSlug())
-                .user(user)
-                .author(author)
-                .originalLink(dto.getOriginalLink())
-                .originalName(dto.getOriginalName())
-                .thumbnail(dto.getThumbnail())
-                .category(categoryFound)
-                .worldContext(worldContextFound)
-                .sect(sectFound)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .newChapAt(LocalDateTime.now())
-                .build();
-
-        BookVm bookVm = mappingService.getBookVm(book);
-
-        LOGGER.info(messageService.getMessage("book.log.create.success"),user.getId(),book.getId());
-
-        return new ResponseSuccess<>(messageService.getMessage("book.create.success"),bookVm);
     }
 
     @Override
@@ -199,7 +207,7 @@ public class BookServiceImpl implements BookService {
         if(!bookFoundById.getSlug().equals(dto.getSlug())){
             var bookFoundBySlug = this.findBySlug(dto.getSlug()).orElse(null);
             if (bookFoundBySlug != null) {
-                LOGGER.error(messageService.getMessage("book.slug-used"),dto.getSlug(),bookFoundBySlug.getId());
+                LOGGER.error(messageService.getMessage("book.log.slug-used"),dto.getSlug(),bookFoundBySlug.getId());
                 throw new BookSlugUsedException(messageService.getMessage("book.slug-used"));
             }
         }

@@ -86,6 +86,25 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,String.format("%s/comments/",apiPrefix)).authenticated()
                         .requestMatchers(HttpMethod.PATCH,String.format("%s/comments/{id}",apiPrefix)).authenticated()
                         .requestMatchers(HttpMethod.DELETE,String.format("%s/comments/{id}",apiPrefix)).authenticated()
+
+                        // category
+                        .requestMatchers(HttpMethod.GET,String.format("%s/categories/",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.GET,String.format("%s/categories/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST,String.format("%s/categories/",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/categories/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+
+                        // sect
+                        .requestMatchers(HttpMethod.GET,String.format("%s/sects/",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.GET,String.format("%s/sects/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST,String.format("%s/sects/",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/sects/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+
+                        // world_context
+                        .requestMatchers(HttpMethod.GET,String.format("%s/worldcontexts/",apiPrefix)).permitAll()
+                        .requestMatchers(HttpMethod.GET,String.format("%s/worldcontexts/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST,String.format("%s/worldcontexts/",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH,String.format("%s/worldcontexts/{id}",apiPrefix)).hasAnyRole(Role.ADMIN.name())
+
                 )
 
                 .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
