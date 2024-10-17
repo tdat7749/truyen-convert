@@ -24,4 +24,8 @@ public class NotificationVm implements Serializable {
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
     private User sender;
+    @JsonProperty("is_read")
+    private boolean isRead;
+    @JsonProperty("time_read")
+    private String timeRead;
 }

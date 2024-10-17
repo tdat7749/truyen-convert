@@ -1,6 +1,7 @@
 package truyenconvert.server.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import truyenconvert.server.models.enums.NotificationType;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -16,17 +18,26 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "notifications")
+@Table(name = "notifications",indexes = {
+        @Index(name = "idx_notifications_created_at", columnList = "created_at")
+})
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false,length = 1000)
     private String message;
+
+    @Column(nullable = false)
     private NotificationType type;
+
+    @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToMany(mappedBy = "notifications")
-    private Set<User> users;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "notification")
+    @JsonManagedReference
+    private Set<NotificationUser> notificationUsers = new HashSet<>();
 
     @ManyToOne()
     @JsonBackReference

@@ -102,13 +102,9 @@ public class User implements UserDetails {
     )
     private List<Chapter> chapters;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "notifications_users",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "notification_id")
-    )
-    private Set<Notification> notifications;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonManagedReference
+    private Set<NotificationUser> notificationUsers = new HashSet<>();
 
     //Donation
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "userGave")
@@ -141,7 +137,7 @@ public class User implements UserDetails {
     private List<Transaction> transactions;
 
     //Notification
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sender")
     @JsonManagedReference
     private List<Notification> sentNotifications;
 
