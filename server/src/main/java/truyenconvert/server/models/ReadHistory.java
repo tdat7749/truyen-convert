@@ -14,9 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "read_histories", indexes = {
-        @Index(name = "idx_user_id", columnList = "user_id"),
-        @Index(name = "idx_book_id", columnList = "book_id"),
-        @Index(name = "idx_chapter", columnList = "chapter")
+        @Index(name = "idx_read_histories_user_id", columnList = "user_id"),
+        @Index(name = "idx_read_histories_book_id", columnList = "book_id")
 })
 public class ReadHistory {
     @Id

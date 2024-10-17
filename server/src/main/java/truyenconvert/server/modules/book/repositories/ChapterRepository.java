@@ -18,8 +18,6 @@ public interface ChapterRepository extends JpaRepository<Chapter,Integer> {
     @Query("Select c.chapter FROM Chapter as c where c.book =:book order by c.chapter desc limit 1")
     Integer getNewestChaperOfBook(Book book);
 
-
-
     @Query("SELECT c FROM Chapter as c where c.book =: book")
     Page<Chapter> getAllChapterOfBook(Book book, Pageable paging);
 

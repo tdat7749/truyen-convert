@@ -10,8 +10,11 @@ import truyenconvert.server.modules.classifies.vm.CategoryVm;
 import truyenconvert.server.modules.classifies.vm.SectVm;
 import truyenconvert.server.modules.classifies.vm.WorldContextVm;
 import truyenconvert.server.modules.comment.vm.CommentVm;
+import truyenconvert.server.modules.donation.vm.DonationVm;
+import truyenconvert.server.modules.read_histories.vm.ReadHistoryVm;
 import truyenconvert.server.modules.report.vm.ReportTypeVm;
 import truyenconvert.server.modules.report.vm.ReportVm;
+import truyenconvert.server.modules.review.vm.ReviewVm;
 import truyenconvert.server.modules.users.vm.UserVm;
 
 import javax.crypto.BadPaddingException;
@@ -226,6 +229,32 @@ public class MappingServiceImpl implements MappingService{
                 .posters(getPosterVm(book.getThumbnail()))
                 .createdAt(book.getCreatedAt().toString())
                 .updatedAt(book.getUpdatedAt().toString())
+                .countChapter(book.getCountChapter())
                 .build();
+    }
+
+    @Override
+    public ReadHistoryVm getReadHistoryVm(ReadHistory history) {
+        return ReadHistoryVm.builder()
+                .updatedAt(history.getUpdatedAt().toString())
+                .createdAt(history.getCreatedAt().toString())
+                .chapter(history.getChapter())
+                .book(getBookSimpleVm(history.getBook()))
+                .build();
+    }
+
+    @Override
+    public ReviewVm getReviewVm(Review review) {
+        return ReviewVm.builder()
+                .id(review.getId())
+                .content(review.getContent())
+                .score(review.getScore())
+                .createdAt(review.getCreatedAt().toString())
+                .build();
+    }
+
+    @Override
+    public DonationVm getDonationVm(Donation donation) {
+        return null;
     }
 }

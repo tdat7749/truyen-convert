@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "chapters", indexes = {
-        @Index(name = "idx_book_id", columnList = "book_id")
+        @Index(name = "idx_chapters_book_id", columnList = "book_id")
 })
 public class Chapter {
     @Id

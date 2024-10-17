@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "marked", indexes = {
-        @Index(name = "idx_user_id", columnList = "user_id"),
-        @Index(name = "idx_book_id", columnList = "book_id")
+        @Index(name = "idx_marked_user_id", columnList = "user_id"),
+        @Index(name = "idx_marked_book_id", columnList = "book_id")
 })
 public class Marked {
     @Id

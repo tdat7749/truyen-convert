@@ -19,7 +19,7 @@ public class BookSimpleVm implements Serializable {
     private PosterVm posters;
     private String slug;
     @JsonProperty("count_chapter")
-    private long countChapter;
+    private int countChapter;
 
     @JsonProperty("created_at")
     private String createdAt;

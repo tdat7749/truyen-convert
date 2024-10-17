@@ -102,6 +102,14 @@ public class User implements UserDetails {
     )
     private List<Chapter> chapters;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "notifications_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "notification_id")
+    )
+    private Set<Notification> notifications;
+
     //Donation
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "userGave")
     @JsonManagedReference
@@ -115,7 +123,7 @@ public class User implements UserDetails {
     //Evaluation
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
     @JsonManagedReference
-    private List<Evaluation> evaluations;
+    private List<Review> reviews;
 
     //Nomination
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
@@ -126,6 +134,16 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
     @JsonManagedReference
     private List<Marked> markeds;
+
+    //Transaction
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonManagedReference
+    private List<Transaction> transactions;
+
+    //Notification
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonManagedReference
+    private List<Notification> sentNotifications;
 
     // LikeComment
     @ManyToMany(fetch = FetchType.LAZY)

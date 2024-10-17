@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "evaluations", indexes = {
-        @Index(name = "idx_user_id", columnList = "user_id"),
-        @Index(name = "idx_book_id", columnList = "book_id")
+@Table(name = "reviews", indexes = {
+        @Index(name = "idx_reviews_user_id", columnList = "user_id"),
+        @Index(name = "idx_reviews_book_id", columnList = "book_id")
 })
-public class Evaluation {
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -30,7 +30,7 @@ public class Evaluation {
 
     @Column(nullable = false)
     @ColumnDefault(value = "'5'")
-    private double score;
+    private float score;
 
     @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;

@@ -20,7 +20,7 @@ import java.util.Set;
 @Table(name = "comments",indexes = {
         @Index(name = "idx_parent_id",columnList = "parent_id"),
         @Index(name = "idx_created_at",columnList = "created_at"),
-        @Index(name = "idx_user_id", columnList = "user_id")
+        @Index(name = "idx_comments_user_id", columnList = "user_id")
 })
 public class Comment {
     @Id

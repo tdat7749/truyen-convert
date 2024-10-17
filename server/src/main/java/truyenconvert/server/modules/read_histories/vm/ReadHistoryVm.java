@@ -7,10 +7,16 @@ import lombok.NoArgsConstructor;
 import truyenconvert.server.modules.book.vm.BookSimpleVm;
 import truyenconvert.server.modules.book.vm.BookVm;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReadHistoryVm {
+public class ReadHistoryVm implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private BookSimpleVm book;
     private int chapter;
     @JsonProperty("created_at")

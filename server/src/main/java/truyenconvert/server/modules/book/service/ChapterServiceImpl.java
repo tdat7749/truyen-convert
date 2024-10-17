@@ -84,20 +84,12 @@ public class ChapterServiceImpl implements ChapterService {
             throw new NotCreaterOfBookException(messageService.getMessage("book.not-the-creater"));
         }
 
-        int newestChaperOfBook = 1;
-        Integer currentNewestChapter = chapterRepository.getNewestChaperOfBook(bookFound);
-        if(currentNewestChapter != null){
-            newestChaperOfBook = currentNewestChapter + 1;
-        }
-
-
-
         Chapter chapter = Chapter.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
-                .chapter(newestChaperOfBook)
+                .chapter(bookFound.getCountChapter() + 1)
                 .unLockCoin(dto.getUnLockCoin())
                 .wordCount(this.countWord(dto.getContent()))
                 .build();
@@ -107,6 +99,7 @@ public class ChapterServiceImpl implements ChapterService {
         }
 
         bookFound.setNewChapAt(LocalDateTime.now());
+        bookFound.setCountChapter(chapter.getChapter());
         bookService.save(bookFound);
         var save = chapterRepository.save(chapter);
         LOGGER.info("{} tạo một chương truyện ID = {}",user.getEmail(),save.getId());
@@ -192,8 +185,7 @@ public class ChapterServiceImpl implements ChapterService {
             isUnlocked = chapterRepository.existsByUserAndChapter(user.getId(),chapterFound.getId());
         }
 
-        Integer currentNewestChapter = chapterRepository.getNewestChaperOfBook(bookOfChapter);
-        ChapterDetailVm chapterDetailVm = mappingService.getChapterDetailVm(bookOfChapter,chapterFound,hashCode,isUnlocked,currentNewestChapter);
+        ChapterDetailVm chapterDetailVm = mappingService.getChapterDetailVm(bookOfChapter,chapterFound,hashCode,isUnlocked, bookOfChapter.getCountChapter());
 
         return new ResponseSuccess<>("Thành công.",chapterDetailVm);
     }
@@ -245,6 +237,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
+    // viết 1 query update toàn bộ các chapter - 1 > chapter bị xóa.
     public ResponseSuccess<Boolean> deleteChapter(int chapterId, User user) {
         var chapterFound = this.findById(chapterId).orElse(null);
         if(chapterFound == null){

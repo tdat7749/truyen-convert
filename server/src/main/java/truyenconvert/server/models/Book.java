@@ -27,11 +27,11 @@ import java.util.List;
         @Index(name = "idx_story_deleted",columnList = "is_deleted"),
         @Index(name = "idx_story_originName",columnList = "original_name"),
         @Index(name = "idx_story_newChapAt",columnList = "new_chap_at"),
-        @Index(name = "idx_poster_id", columnList = "poster_id"),
-        @Index(name = "idx_author_id", columnList = "author_id"),
-        @Index(name = "idx_sect_id", columnList = "sect_id"),
-        @Index(name = "idx_world_context_id", columnList = "world_context_id"),
-        @Index(name = "idx_category_id", columnList = "category_id")
+        @Index(name = "idx_books_poster_id", columnList = "poster_id"),
+        @Index(name = "idx_books_author_id", columnList = "author_id"),
+        @Index(name = "idx_books_sect_id", columnList = "sect_id"),
+        @Index(name = "idx_books_world_context_id", columnList = "world_context_id"),
+        @Index(name = "idx_books_category_id", columnList = "category_id")
 })
 public class Book {
     @Id
@@ -66,6 +66,10 @@ public class Book {
     @ColumnDefault(value = "'0'")
     private long countEvaluation;
 
+    @Column(nullable = false,name = "count_chapter")
+    @ColumnDefault(value = "'0'")
+    private int countChapter;
+
 
     @Column(nullable = false,name = "original_name")
     private String originalName;
@@ -80,7 +84,7 @@ public class Book {
 
     @Column(nullable = false)
     @ColumnDefault(value = "'5'")
-    private double score;
+    private float score;
 
     @Column(nullable = false,name = "is_deleted")
     @ColumnDefault(value = "'false'")
@@ -136,7 +140,7 @@ public class Book {
     //Evaluation
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "book")
     @JsonManagedReference
-    private List<Evaluation> evaluations;
+    private List<Review> reviews;
 
     //Nomination
 

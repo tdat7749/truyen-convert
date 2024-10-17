@@ -7,8 +7,11 @@ import truyenconvert.server.modules.classifies.vm.CategoryVm;
 import truyenconvert.server.modules.classifies.vm.SectVm;
 import truyenconvert.server.modules.classifies.vm.WorldContextVm;
 import truyenconvert.server.modules.comment.vm.CommentVm;
+import truyenconvert.server.modules.donation.vm.DonationVm;
+import truyenconvert.server.modules.read_histories.vm.ReadHistoryVm;
 import truyenconvert.server.modules.report.vm.ReportTypeVm;
 import truyenconvert.server.modules.report.vm.ReportVm;
+import truyenconvert.server.modules.review.vm.ReviewVm;
 import truyenconvert.server.modules.users.vm.UserVm;
 
 import javax.crypto.BadPaddingException;
@@ -38,4 +41,8 @@ public interface MappingService {
     CommentVm getCommentVm(Comment comment);
 
     BookSimpleVm getBookSimpleVm(Book book);
+    ReadHistoryVm getReadHistoryVm(ReadHistory history);
+    ReviewVm getReviewVm(Review review);
+
+    DonationVm getDonationVm(Donation donation);
 }
